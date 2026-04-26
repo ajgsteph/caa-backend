@@ -1,0 +1,99 @@
+x-app-env: &app-env
+  APP_NAME: CAA
+  APP_ENV: production
+  APP_DEBUG: "false"
+  APP_KEY: ${APP_KEY:?Set APP_KEY in .env or via env (php artisan key:generate --show)}
+  APP_URL: ${APP_URL:-http://localhost:8000}
+
+  LOG_CHANNEL: stderr
+  LOG_LEVEL: info
+
+  DB_CONNECTION: pgsql
+  DB_HOST: db
+  DB_PORT: 5432
+  DB_DATABASE: ${POSTGRES_DB:-caa}
+  DB_USERNAME: ${POSTGRES_USER:-caa}
+  DB_PASSWORD: ${POSTGRES_PASSWORD:-caa}
+
+  CACHE_STORE: redis
+  SESSION_DRIVER: redis
+  QUEUE_CONNECTION: redis
+  REDIS_CLIENT: phpredis
+  REDIS_HOST: redis
+  REDIS_PORT: 6379
+
+  MAIL_MAILER: log
+
+  FILESYSTEM_DISK: local
+
+services:
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: caa-backend:latest
+    restart: unless-stopped
+    environment:
+      <<: *app-env
+      SERVER_NAME: ":80"
+    ports:
+      - "${APP_PORT:-8000}:80"
+      - "${APP_HTTPS_PORT:-8443}:443"
+    volumes:
+      - app-storage:/app/storage/app
+    depends_on:
+      db:
+        condition: service_healthy
+      redis:
+        condition: service_started
+
+  worker:
+    image: caa-backend:latest
+    build:
+      context: .
+      dockerfile: Dockerfile
+    restart: unless-stopped
+    command: ["php", "artisan", "queue:work", "--tries=3", "--timeout=120", "--sleep=2"]
+    environment:
+      <<: *app-env
+    volumes:
+      - app-storage:/app/storage/app
+    depends_on:
+      app:
+        condition: service_started
+      db:
+        condition: service_healthy
+      redis:
+        condition: service_started
+
+  db:
+    image: postgres:16-alpine
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: ${POSTGRES_DB:-caa}
+      POSTGRES_USER: ${POSTGRES_USER:-caa}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-caa}
+    volumes:
+      - db-data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER:-caa} -d ${POSTGRES_DB:-caa}"]
+      interval: 5s
+      timeout: 5s
+      retries: 12
+
+  redis:
+    image: redis:7-alpine
+    restart: unless-stopped
+    command: ["redis-server", "--appendonly", "yes"]
+    volumes:
+      - redis-data:/data
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 5s
+      timeout: 3s
+      retries: 10
+
+volumes:
+  app-storage:
+  db-data:
+  redis-data:

@@ -1,0 +1,68 @@
+# Version control
+.git
+.gitattributes
+.gitignore
+.github
+
+# IDE / editor
+.idea
+.vscode
+.editorconfig
+
+# Node — not used in build
+node_modules
+npm-debug.log
+yarn.lock
+package-lock.json
+.npmrc
+
+# PHP build artifacts that should be re-built inside the container
+vendor
+composer.phar
+
+# Local secrets — never bake them into the image. Provide via compose env.
+.env
+.env.local
+.env.*.local
+
+# SQLite dev database
+database/database.sqlite
+database/*.sqlite
+database/*.sqlite-journal
+
+# Laravel runtime artefacts (rebuilt by the entrypoint)
+storage/app/public/*
+!storage/app/public/.gitignore
+storage/app/private/*
+!storage/app/private/.gitignore
+storage/framework/cache/*
+!storage/framework/cache/.gitignore
+storage/framework/sessions/*
+!storage/framework/sessions/.gitignore
+storage/framework/testing/*
+!storage/framework/testing/.gitignore
+storage/framework/views/*
+!storage/framework/views/.gitignore
+storage/logs/*
+!storage/logs/.gitignore
+bootstrap/cache/*
+!bootstrap/cache/.gitignore
+
+# Generated documentation (Scribe regenerates them)
+.scribe
+public/docs
+public/vendor
+
+# Public symlink — recreated by entrypoint
+public/storage
+
+# Tests are dev-only
+tests
+phpunit.xml
+
+# Project meta
+README.md
+*.md
+docker-compose*.yml
+Dockerfile*
+.dockerignore

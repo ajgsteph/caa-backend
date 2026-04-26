@@ -1,0 +1,25 @@
+{
+    {$CADDY_GLOBAL_OPTIONS}
+
+    frankenphp {
+        {$FRANKENPHP_CONFIG}
+    }
+}
+
+{$CADDY_EXTRA_CONFIG}
+
+{$SERVER_NAME:localhost} {
+    log {
+        output stderr
+        format console
+        {$CADDY_SERVER_LOG_OPTIONS}
+    }
+
+    root * /app/public
+    encode zstd br gzip
+
+    {$CADDY_SERVER_EXTRA_DIRECTIVES}
+
+    # Laravel front controller — every non-file request is sent to public/index.php.
+    php_server
+}
