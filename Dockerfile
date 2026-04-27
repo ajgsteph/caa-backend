@@ -59,7 +59,7 @@ FROM base AS runtime
 
 ENV APP_ENV=production \
     APP_DEBUG=false \
-    SERVER_NAME=":80"
+    PORT=8080
 
 # Production-tuned PHP configuration.
 RUN cp "$PHP_INI_DIR/php.ini-production" "$PHP_INI_DIR/php.ini"
@@ -89,8 +89,8 @@ RUN mkdir -p \
 COPY docker/entrypoint.sh /usr/local/bin/entrypoint
 RUN chmod +x /usr/local/bin/entrypoint
 
-# 80 = HTTP, 443 + 443/udp = HTTPS / HTTP3 (FrankenPHP can auto-issue certs).
-EXPOSE 80 443 443/udp
+# Render injects $PORT at runtime; this EXPOSE is informational.
+EXPOSE 8080
 
 ENTRYPOINT ["/usr/local/bin/entrypoint"]
 CMD ["frankenphp", "run", "--config", "/etc/caddy/Caddyfile"]
