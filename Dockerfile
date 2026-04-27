@@ -1,96 +1,39 @@
-# CAA backend — FrankenPHP (Caddy + PHP) single-binary image
-#
-#   Stage 1 (deps)    : install PHP extensions + composer dependencies
-#   Stage 2 (runtime) : minimal image with the compiled extensions and the app
+# Base PHP
+FROM php:8.2-fpm
 
-ARG PHP_VERSION=8.3
-ARG FRANKENPHP_VERSION=1
+# Installer dépendances système
+RUN apt-get update && apt-get install -y \
+    git \
+    curl \
+    libpng-dev \
+    libonig-dev \
+    libxml2-dev \
+    zip \
+    unzip \
+    nginx \
+    && docker-php-ext-install pdo pdo_mysql mbstring exif pcntl bcmath gd
 
-# ---------------------------------------------------------------------------
-# Base layer: FrankenPHP + PHP extensions required by Laravel + project libs
-# ---------------------------------------------------------------------------
-FROM dunglas/frankenphp:${FRANKENPHP_VERSION}-php${PHP_VERSION} AS base
+# Installer Composer
+COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
 
-# install-php-extensions handles dependencies + cleanup automatically.
-COPY --from=mlocati/php-extension-installer:2 /usr/bin/install-php-extensions /usr/local/bin/
+# Définir le dossier de travail
+WORKDIR /var/www
 
-RUN install-php-extensions \
-        bcmath \
-        exif \
-        gd \
-        intl \
-        opcache \
-        pcntl \
-        pdo_pgsql \
-        redis \
-        zip
-
-# Composer (kept available in the runtime image so artisan tinker / debug works,
-# but the final vendor/ is built only once in the deps stage below).
-COPY --from=composer:2 /usr/bin/composer /usr/bin/composer
-
-WORKDIR /app
-
-# ---------------------------------------------------------------------------
-# Stage 1: install PHP dependencies (production only)
-# ---------------------------------------------------------------------------
-FROM base AS deps
-
-# Install vendor first using only composer.* so the layer caches well.
-COPY composer.json composer.lock ./
-RUN --mount=type=cache,target=/root/.composer/cache \
-    composer install \
-        --no-dev \
-        --no-interaction \
-        --no-progress \
-        --no-scripts \
-        --no-autoloader \
-        --prefer-dist
-
-# Copy the rest of the application and finalize the autoloader.
+# Copier le projet
 COPY . .
-RUN composer dump-autoload --classmap-authoritative --no-dev \
- && composer run-script post-autoload-dump --no-dev || true
 
-# ---------------------------------------------------------------------------
-# Stage 2: runtime image
-# ---------------------------------------------------------------------------
-FROM base AS runtime
+# Installer les dépendances Laravel
+RUN composer install --no-dev --optimize-autoloader
 
-ENV APP_ENV=production \
-    APP_DEBUG=false \
-    PORT=8080
+# Permissions Laravel
+RUN chown -R www-data:www-data /var/www \
+    && chmod -R 755 /var/www/storage
 
-# Production-tuned PHP configuration.
-RUN cp "$PHP_INI_DIR/php.ini-production" "$PHP_INI_DIR/php.ini"
-COPY docker/php-prod.ini /usr/local/etc/php/conf.d/zz-app.ini
+# Copier config Nginx
+COPY docker/nginx/default.conf /etc/nginx/sites-available/default
 
-# Caddy / FrankenPHP config (serves Laravel public/ via php_server).
-COPY docker/Caddyfile /etc/caddy/Caddyfile
+# Exposer port (Render utilise 8000 souvent)
+EXPOSE 8000
 
-# Bring in the built application.
-COPY --from=deps --chown=www-data:www-data /app /app
-
-# Make sure the runtime-writable directories exist and are owned by www-data.
-RUN mkdir -p \
-        storage/app/public \
-        storage/app/private \
-        storage/framework/cache \
-        storage/framework/sessions \
-        storage/framework/views \
-        storage/logs \
-        bootstrap/cache \
- && chown -R www-data:www-data storage bootstrap/cache \
- && rm -f public/storage \
- && ln -s ../storage/app/public public/storage
-
-# Entrypoint warms the config/view cache before handing off to Caddy or to a
-# queue:work / scheduler command.
-COPY docker/entrypoint.sh /usr/local/bin/entrypoint
-RUN chmod +x /usr/local/bin/entrypoint
-
-# Render injects $PORT at runtime; this EXPOSE is informational.
-EXPOSE 8080
-
-ENTRYPOINT ["/usr/local/bin/entrypoint"]
-CMD ["frankenphp", "run", "--config", "/etc/caddy/Caddyfile"]
+# Script de démarrage
+CMD service nginx start && php-fpm
