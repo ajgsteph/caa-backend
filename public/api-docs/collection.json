@@ -1,0 +1,785 @@
+{
+    "variable": [
+        {
+            "id": "baseUrl",
+            "key": "baseUrl",
+            "type": "string",
+            "name": "string",
+            "value": "http:\/\/localhost"
+        }
+    ],
+    "info": {
+        "name": "CAA \u2014 API Documentation",
+        "_postman_id": "c34c5aec-bff8-4b7f-9294-a6d279c0a963",
+        "description": "API REST de la plateforme CAA (Certificat Authenticit\u00e9 Artiste) \u2014 gestion des artistes, \u0153uvres, certificats num\u00e9riques et v\u00e9rification publique.",
+        "schema": "https:\/\/schema.getpostman.com\/json\/collection\/v2.1.0\/collection.json"
+    },
+    "item": [
+        {
+            "name": "Authentication",
+            "description": "\nEndpoints d'inscription, connexion et d\u00e9connexion. Les tokens sont \u00e9mis par Sanctum.",
+            "item": [
+                {
+                    "name": "Inscription d'un artiste",
+                    "request": {
+                        "url": {
+                            "host": "{{baseUrl}}",
+                            "path": "api\/v1\/auth\/register",
+                            "query": [],
+                            "raw": "{{baseUrl}}\/api\/v1\/auth\/register"
+                        },
+                        "method": "POST",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application\/json"
+                            },
+                            {
+                                "key": "Accept",
+                                "value": "application\/json"
+                            }
+                        ],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\"last_name\":\"b\",\"first_name\":\"n\",\"artist_name\":\"g\",\"email\":\"rowan.gulgowski@example.com\",\"password\":\"architecto\",\"phone\":\"n\"}"
+                        },
+                        "description": "Cr\u00e9e un compte artiste, l'attache au r\u00f4le `artist` et retourne un token Sanctum.",
+                        "auth": {
+                            "type": "noauth"
+                        }
+                    },
+                    "response": [
+                        {
+                            "header": [],
+                            "code": 201,
+                            "body": "{\n  \"data\": {\n    \"id\": 5,\n    \"last_name\": \"Diop\",\n    \"first_name\": \"Awa\",\n    \"artist_name\": \"AWA-D\",\n    \"email\": \"awa@test.sn\",\n    \"phone\": \"+221770000000\",\n    \"status\": \"ACTIVE\",\n    \"registered_at\": \"2026-04-25T22:14:23+00:00\",\n    \"roles\": [\"artist\"]\n  },\n  \"token\": \"5|h6uDj3r2qZr87yKofZNmjXbaz3S3JyWcxXe4j5Eyf9f4fce1\"\n}",
+                            "name": "success"
+                        }
+                    ]
+                },
+                {
+                    "name": "Connexion",
+                    "request": {
+                        "url": {
+                            "host": "{{baseUrl}}",
+                            "path": "api\/v1\/auth\/login",
+                            "query": [],
+                            "raw": "{{baseUrl}}\/api\/v1\/auth\/login"
+                        },
+                        "method": "POST",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application\/json"
+                            },
+                            {
+                                "key": "Accept",
+                                "value": "application\/json"
+                            }
+                        ],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\"email\":\"gbailey@example.net\",\"password\":\"|]|{+-\",\"device_name\":\"v\"}"
+                        },
+                        "description": "Authentifie un utilisateur et retourne un token Sanctum.",
+                        "auth": {
+                            "type": "noauth"
+                        }
+                    },
+                    "response": [
+                        {
+                            "header": [],
+                            "code": 200,
+                            "body": "{\n  \"data\": {\"id\": 3, \"email\": \"awa@caa.sn\", \"roles\": [\"artist\"]},\n  \"token\": \"2|6URd4kiuvxY5pHKFzSnpYbP0LM3XkLattT2rTfCze475f5bb\"\n}",
+                            "name": "success"
+                        },
+                        {
+                            "header": [],
+                            "code": 422,
+                            "body": "{\n  \"message\": \"Identifiants invalides.\",\n  \"errors\": {\"email\": [\"Identifiants invalides.\"]}\n}",
+                            "name": "invalid credentials"
+                        }
+                    ]
+                },
+                {
+                    "name": "D\u00e9connexion",
+                    "request": {
+                        "url": {
+                            "host": "{{baseUrl}}",
+                            "path": "api\/v1\/auth\/logout",
+                            "query": [],
+                            "raw": "{{baseUrl}}\/api\/v1\/auth\/logout"
+                        },
+                        "method": "POST",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application\/json"
+                            },
+                            {
+                                "key": "Accept",
+                                "value": "application\/json"
+                            }
+                        ],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\"all_devices\":false}"
+                        },
+                        "description": "R\u00e9voque le token courant. Passez `all_devices=true` pour r\u00e9voquer tous les tokens."
+                    },
+                    "response": [
+                        {
+                            "header": [],
+                            "code": 200,
+                            "body": "{\"message\": \"D\u00e9connexion r\u00e9ussie.\"}",
+                            "name": ""
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "name": "Certificates",
+            "description": "\nCr\u00e9ation, consultation, r\u00e9vocation et t\u00e9l\u00e9chargement des certificats d'authenticit\u00e9.",
+            "item": [
+                {
+                    "name": "Lister mes certificats",
+                    "request": {
+                        "url": {
+                            "host": "{{baseUrl}}",
+                            "path": "api\/v1\/certificates",
+                            "query": [],
+                            "raw": "{{baseUrl}}\/api\/v1\/certificates"
+                        },
+                        "method": "GET",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application\/json"
+                            },
+                            {
+                                "key": "Accept",
+                                "value": "application\/json"
+                            }
+                        ],
+                        "body": null,
+                        "description": "Retourne les certificats de l'artiste authentifi\u00e9, pagin\u00e9s par 15."
+                    },
+                    "response": [
+                        {
+                            "header": [
+                                {
+                                    "key": "cache-control",
+                                    "value": "no-cache, private"
+                                },
+                                {
+                                    "key": "content-type",
+                                    "value": "application\/json"
+                                },
+                                {
+                                    "key": "vary",
+                                    "value": "Origin"
+                                }
+                            ],
+                            "code": 401,
+                            "body": "{\"message\":\"Unauthenticated.\"}",
+                            "name": ""
+                        }
+                    ]
+                },
+                {
+                    "name": "Cr\u00e9er un certificat",
+                    "request": {
+                        "url": {
+                            "host": "{{baseUrl}}",
+                            "path": "api\/v1\/certificates",
+                            "query": [],
+                            "raw": "{{baseUrl}}\/api\/v1\/certificates"
+                        },
+                        "method": "POST",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "multipart\/form-data"
+                            },
+                            {
+                                "key": "Accept",
+                                "value": "application\/json"
+                            }
+                        ],
+                        "body": {
+                            "mode": "formdata",
+                            "formdata": [
+                                {
+                                    "key": "artwork[title]",
+                                    "value": "b",
+                                    "type": "text",
+                                    "description": ""
+                                },
+                                {
+                                    "key": "artwork[type]",
+                                    "value": "INSTALLATION",
+                                    "type": "text",
+                                    "description": ""
+                                },
+                                {
+                                    "key": "artwork[technique]",
+                                    "value": "n",
+                                    "type": "text",
+                                    "description": ""
+                                },
+                                {
+                                    "key": "artwork[dimensions]",
+                                    "value": "g",
+                                    "type": "text",
+                                    "description": ""
+                                },
+                                {
+                                    "key": "artwork[year]",
+                                    "value": "16",
+                                    "type": "text",
+                                    "description": ""
+                                },
+                                {
+                                    "key": "artwork[description]",
+                                    "value": "Velit et fugiat sunt nihil accusantium.",
+                                    "type": "text",
+                                    "description": ""
+                                },
+                                {
+                                    "key": "artwork[signature]",
+                                    "value": "n",
+                                    "type": "text",
+                                    "description": ""
+                                },
+                                {
+                                    "key": "client[last_name]",
+                                    "value": "i",
+                                    "type": "text",
+                                    "description": ""
+                                },
+                                {
+                                    "key": "client[first_name]",
+                                    "value": "k",
+                                    "type": "text",
+                                    "description": ""
+                                },
+                                {
+                                    "key": "client[email]",
+                                    "value": "aschuster@example.com",
+                                    "type": "text",
+                                    "description": ""
+                                },
+                                {
+                                    "key": "client[phone]",
+                                    "value": "k",
+                                    "type": "text",
+                                    "description": ""
+                                },
+                                {
+                                    "key": "payment[method]",
+                                    "value": "MTN_MOMO",
+                                    "type": "text",
+                                    "description": ""
+                                },
+                                {
+                                    "key": "artwork[title]",
+                                    "value": "Soleil de Dakar",
+                                    "type": "text",
+                                    "description": "Titre de l'\u0153uvre."
+                                },
+                                {
+                                    "key": "artwork[type]",
+                                    "value": "PAINTING",
+                                    "type": "text",
+                                    "description": "Type d'\u0153uvre."
+                                },
+                                {
+                                    "key": "artwork[technique]",
+                                    "value": "Acrylique sur toile",
+                                    "type": "text",
+                                    "description": "Technique utilis\u00e9e."
+                                },
+                                {
+                                    "key": "artwork[dimensions]",
+                                    "value": "80x60 cm",
+                                    "type": "text",
+                                    "description": "Dimensions."
+                                },
+                                {
+                                    "key": "artwork[year]",
+                                    "value": "2025",
+                                    "type": "text",
+                                    "description": "Ann\u00e9e de cr\u00e9ation."
+                                },
+                                {
+                                    "key": "client[last_name]",
+                                    "value": "Ndiaye",
+                                    "type": "text",
+                                    "description": "Nom du client."
+                                },
+                                {
+                                    "key": "client[first_name]",
+                                    "value": "Mamadou",
+                                    "type": "text",
+                                    "description": "Pr\u00e9nom du client."
+                                },
+                                {
+                                    "key": "client[email]",
+                                    "value": "client@test.sn",
+                                    "type": "text",
+                                    "description": "Email du client."
+                                },
+                                {
+                                    "key": "client[phone]",
+                                    "value": "+221770000099",
+                                    "type": "text",
+                                    "description": "T\u00e9l\u00e9phone du client."
+                                },
+                                {
+                                    "key": "payment[method]",
+                                    "value": "WAVE",
+                                    "type": "text",
+                                    "description": "M\u00e9thode de paiement."
+                                },
+                                {
+                                    "key": "artwork[image]",
+                                    "src": [],
+                                    "type": "file"
+                                },
+                                {
+                                    "key": "artwork[image]",
+                                    "src": [],
+                                    "type": "file"
+                                }
+                            ]
+                        },
+                        "description": "R\u00e9serv\u00e9 au r\u00f4le `artist`. Cr\u00e9e l'\u0153uvre + le client + le certificat (status `PENDING`),\ninitie le paiement (10 000 FCFA) et d\u00e9clenche le pipeline asynchrone de g\u00e9n\u00e9ration\n(QR, PDF, email). Le certificat passe \u00e0 `ACTIVE` une fois le paiement confirm\u00e9."
+                    },
+                    "response": [
+                        {
+                            "header": [],
+                            "code": 202,
+                            "body": "{\"data\": {\"unique_number\": \"CAA-2026-0001\", \"status\": \"PENDING\"}}",
+                            "name": "accepted"
+                        }
+                    ]
+                },
+                {
+                    "name": "Voir un certificat",
+                    "request": {
+                        "url": {
+                            "host": "{{baseUrl}}",
+                            "path": "api\/v1\/certificates\/:certificate_id",
+                            "query": [],
+                            "raw": "{{baseUrl}}\/api\/v1\/certificates\/:certificate_id",
+                            "variable": [
+                                {
+                                    "id": "certificate_id",
+                                    "key": "certificate_id",
+                                    "value": "16",
+                                    "description": "The ID of the certificate."
+                                },
+                                {
+                                    "id": "certificate",
+                                    "key": "certificate",
+                                    "value": "1",
+                                    "description": "ID du certificat."
+                                }
+                            ]
+                        },
+                        "method": "GET",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application\/json"
+                            },
+                            {
+                                "key": "Accept",
+                                "value": "application\/json"
+                            }
+                        ],
+                        "body": null,
+                        "description": "L'artiste voit ses propres certificats ; les admins voient tout."
+                    },
+                    "response": [
+                        {
+                            "header": [
+                                {
+                                    "key": "cache-control",
+                                    "value": "no-cache, private"
+                                },
+                                {
+                                    "key": "content-type",
+                                    "value": "application\/json"
+                                },
+                                {
+                                    "key": "vary",
+                                    "value": "Origin"
+                                }
+                            ],
+                            "code": 401,
+                            "body": "{\"message\":\"Unauthenticated.\"}",
+                            "name": ""
+                        }
+                    ]
+                },
+                {
+                    "name": "Obtenir un lien sign\u00e9 de t\u00e9l\u00e9chargement PDF",
+                    "request": {
+                        "url": {
+                            "host": "{{baseUrl}}",
+                            "path": "api\/v1\/certificates\/:certificate_id\/download-link",
+                            "query": [],
+                            "raw": "{{baseUrl}}\/api\/v1\/certificates\/:certificate_id\/download-link",
+                            "variable": [
+                                {
+                                    "id": "certificate_id",
+                                    "key": "certificate_id",
+                                    "value": "16",
+                                    "description": "The ID of the certificate."
+                                },
+                                {
+                                    "id": "certificate",
+                                    "key": "certificate",
+                                    "value": "1",
+                                    "description": "ID du certificat."
+                                }
+                            ]
+                        },
+                        "method": "GET",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application\/json"
+                            },
+                            {
+                                "key": "Accept",
+                                "value": "application\/json"
+                            }
+                        ],
+                        "body": null,
+                        "description": "Retourne une URL sign\u00e9e valide 1 h vers `\/api\/v1\/download\/{id}`."
+                    },
+                    "response": [
+                        {
+                            "header": [],
+                            "code": 200,
+                            "body": "{\"url\": \"http:\/\/localhost\/api\/v1\/download\/1?expires=...&signature=...\", \"expires_in_seconds\": 3600}",
+                            "name": ""
+                        }
+                    ]
+                },
+                {
+                    "name": "R\u00e9voquer un certificat",
+                    "request": {
+                        "url": {
+                            "host": "{{baseUrl}}",
+                            "path": "api\/v1\/certificates\/:certificate_id\/revoke",
+                            "query": [],
+                            "raw": "{{baseUrl}}\/api\/v1\/certificates\/:certificate_id\/revoke",
+                            "variable": [
+                                {
+                                    "id": "certificate_id",
+                                    "key": "certificate_id",
+                                    "value": "16",
+                                    "description": "The ID of the certificate."
+                                },
+                                {
+                                    "id": "certificate",
+                                    "key": "certificate",
+                                    "value": "1",
+                                    "description": "ID du certificat."
+                                }
+                            ]
+                        },
+                        "method": "POST",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application\/json"
+                            },
+                            {
+                                "key": "Accept",
+                                "value": "application\/json"
+                            }
+                        ],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\"reason\":\"\u0152uvre non authentique selon expertise.\"}"
+                        },
+                        "description": "R\u00e9serv\u00e9 aux r\u00f4les `admin` et `super_admin`. Le motif est enregistr\u00e9 et notifi\u00e9\npar email \u00e0 l'artiste et au client."
+                    },
+                    "response": []
+                }
+            ]
+        },
+        {
+            "name": "Profile",
+            "description": "\nGestion du profil utilisateur authentifi\u00e9.",
+            "item": [
+                {
+                    "name": "R\u00e9cup\u00e9rer le profil courant",
+                    "request": {
+                        "url": {
+                            "host": "{{baseUrl}}",
+                            "path": "api\/v1\/profile",
+                            "query": [],
+                            "raw": "{{baseUrl}}\/api\/v1\/profile"
+                        },
+                        "method": "GET",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application\/json"
+                            },
+                            {
+                                "key": "Accept",
+                                "value": "application\/json"
+                            }
+                        ],
+                        "body": null,
+                        "description": ""
+                    },
+                    "response": [
+                        {
+                            "header": [
+                                {
+                                    "key": "cache-control",
+                                    "value": "no-cache, private"
+                                },
+                                {
+                                    "key": "content-type",
+                                    "value": "application\/json"
+                                },
+                                {
+                                    "key": "vary",
+                                    "value": "Origin"
+                                }
+                            ],
+                            "code": 401,
+                            "body": "{\"message\":\"Unauthenticated.\"}",
+                            "name": ""
+                        }
+                    ]
+                },
+                {
+                    "name": "Modifier le mot de passe",
+                    "request": {
+                        "url": {
+                            "host": "{{baseUrl}}",
+                            "path": "api\/v1\/profile\/password",
+                            "query": [],
+                            "raw": "{{baseUrl}}\/api\/v1\/profile\/password"
+                        },
+                        "method": "PATCH",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application\/json"
+                            },
+                            {
+                                "key": "Accept",
+                                "value": "application\/json"
+                            }
+                        ],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\"current_password\":\"architecto\",\"password\":\"architecto\"}"
+                        },
+                        "description": "N\u00e9cessite le mot de passe actuel."
+                    },
+                    "response": []
+                },
+                {
+                    "name": "Modifier l'email",
+                    "request": {
+                        "url": {
+                            "host": "{{baseUrl}}",
+                            "path": "api\/v1\/profile\/email",
+                            "query": [],
+                            "raw": "{{baseUrl}}\/api\/v1\/profile\/email"
+                        },
+                        "method": "PATCH",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application\/json"
+                            },
+                            {
+                                "key": "Accept",
+                                "value": "application\/json"
+                            }
+                        ],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\"email\":\"gbailey@example.net\",\"current_password\":\"architecto\"}"
+                        },
+                        "description": "Le mot de passe actuel doit \u00eatre fourni en confirmation."
+                    },
+                    "response": []
+                },
+                {
+                    "name": "Modifier le t\u00e9l\u00e9phone",
+                    "request": {
+                        "url": {
+                            "host": "{{baseUrl}}",
+                            "path": "api\/v1\/profile\/phone",
+                            "query": [],
+                            "raw": "{{baseUrl}}\/api\/v1\/profile\/phone"
+                        },
+                        "method": "PATCH",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application\/json"
+                            },
+                            {
+                                "key": "Accept",
+                                "value": "application\/json"
+                            }
+                        ],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\"phone\":\"b\"}"
+                        },
+                        "description": ""
+                    },
+                    "response": []
+                }
+            ]
+        },
+        {
+            "name": "Public verification",
+            "description": "\nEndpoint public (sans authentification) pour v\u00e9rifier l'authenticit\u00e9 d'un certificat.",
+            "item": [
+                {
+                    "name": "V\u00e9rifier un certificat",
+                    "request": {
+                        "url": {
+                            "host": "{{baseUrl}}",
+                            "path": "api\/v1\/verify\/:number",
+                            "query": [],
+                            "raw": "{{baseUrl}}\/api\/v1\/verify\/:number",
+                            "variable": [
+                                {
+                                    "id": "number",
+                                    "key": "number",
+                                    "value": "CAA-2026-0001",
+                                    "description": "Num\u00e9ro unique du certificat (format `CAA-YYYY-NNNN`)."
+                                }
+                            ]
+                        },
+                        "method": "GET",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application\/json"
+                            },
+                            {
+                                "key": "Accept",
+                                "value": "application\/json"
+                            }
+                        ],
+                        "body": null,
+                        "description": "Retourne les informations publiques du certificat (sans donn\u00e9es sensibles client\/paiement).\nLe statut indique si le certificat est `ACTIVE`, `REVOKED` ou `PENDING`.",
+                        "auth": {
+                            "type": "noauth"
+                        }
+                    },
+                    "response": [
+                        {
+                            "header": [],
+                            "code": 200,
+                            "body": "{\n  \"data\": {\n    \"unique_number\": \"CAA-2026-0001\",\n    \"status\": \"ACTIVE\",\n    \"is_valid\": true,\n    \"certified_at\": \"2026-04-25T22:18:53+00:00\",\n    \"artwork\": {\"title\": \"Soleil de Dakar\", \"type\": \"PAINTING\", \"year\": 2025},\n    \"artist\": {\"artist_name\": \"AWA-D\"}\n  }\n}",
+                            "name": ""
+                        }
+                    ]
+                },
+                {
+                    "name": "T\u00e9l\u00e9charger le PDF (URL sign\u00e9e)",
+                    "request": {
+                        "url": {
+                            "host": "{{baseUrl}}",
+                            "path": "api\/v1\/download\/:certificate_id",
+                            "query": [
+                                {
+                                    "key": "expires",
+                                    "value": "1777159343",
+                                    "description": "Timestamp d'expiration.",
+                                    "disabled": false
+                                },
+                                {
+                                    "key": "signature",
+                                    "value": "70916c5c1526696627504dd5e90866c163236ced51945ea198887fb2f5da57d1",
+                                    "description": "Signature HMAC.",
+                                    "disabled": false
+                                }
+                            ],
+                            "raw": "{{baseUrl}}\/api\/v1\/download\/:certificate_id?expires=1777159343&signature=70916c5c1526696627504dd5e90866c163236ced51945ea198887fb2f5da57d1",
+                            "variable": [
+                                {
+                                    "id": "certificate_id",
+                                    "key": "certificate_id",
+                                    "value": "16",
+                                    "description": "The ID of the certificate."
+                                },
+                                {
+                                    "id": "certificate",
+                                    "key": "certificate",
+                                    "value": "1",
+                                    "description": "ID du certificat."
+                                }
+                            ]
+                        },
+                        "method": "GET",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application\/json"
+                            },
+                            {
+                                "key": "Accept",
+                                "value": "application\/json"
+                            }
+                        ],
+                        "body": null,
+                        "description": "URL obtenue via `GET \/api\/v1\/certificates\/{id}\/download-link`. Lien valide 1 h.\nRetourne le PDF du certificat. 404 si le certificat est r\u00e9voqu\u00e9 ou si le PDF n'a pas\nencore \u00e9t\u00e9 g\u00e9n\u00e9r\u00e9.",
+                        "auth": {
+                            "type": "noauth"
+                        }
+                    },
+                    "response": [
+                        {
+                            "header": [],
+                            "code": 200,
+                            "body": "PDF binary stream",
+                            "name": "success"
+                        },
+                        {
+                            "header": [],
+                            "code": 403,
+                            "body": "{\"message\": \"Invalid signature.\"}",
+                            "name": "invalid signature"
+                        },
+                        {
+                            "header": [],
+                            "code": 404,
+                            "body": "{\"message\": \"Le PDF du certificat n'est pas encore disponible.\"}",
+                            "name": "revoked or not ready"
+                        }
+                    ]
+                }
+            ]
+        }
+    ],
+    "auth": {
+        "type": "bearer",
+        "bearer": [
+            {
+                "key": "Authorization",
+                "type": "string"
+            }
+        ]
+    }
+}

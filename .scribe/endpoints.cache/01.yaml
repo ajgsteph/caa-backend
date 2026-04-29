@@ -97,7 +97,7 @@ endpoints:
         name: certificate_id
         description: 'The ID of the certificate.'
         required: true
-        example: 1
+        example: 16
         type: integer
         enumValues: []
         exampleWasSpecified: false
@@ -115,7 +115,7 @@ endpoints:
         nullable: false
         deprecated: false
     cleanUrlParameters:
-      certificate_id: 1
+      certificate_id: 16
       certificate: 1
     queryParameters:
       expires:

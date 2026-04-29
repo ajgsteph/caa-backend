@@ -38,4 +38,4 @@ COPY docker/nginx/default.conf /etc/nginx/sites-available/default
 EXPOSE 8000
 
 # Script de démarrage
-CMD service nginx start && php-fpm
+CMD service nginx start && php-fpm  ["/entrypoint.sh"]

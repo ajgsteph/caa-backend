@@ -1,0 +1,835 @@
+openapi: 3.0.3
+info:
+  title: 'CAA — API Documentation'
+  description: 'API REST de la plateforme CAA (Certificat Authenticité Artiste) — gestion des artistes, œuvres, certificats numériques et vérification publique.'
+  version: 1.0.0
+servers:
+  -
+    url: 'http://localhost'
+tags:
+  -
+    name: Authentication
+    description: "\nEndpoints d'inscription, connexion et déconnexion. Les tokens sont émis par Sanctum."
+  -
+    name: Certificates
+    description: "\nCréation, consultation, révocation et téléchargement des certificats d'authenticité."
+  -
+    name: Profile
+    description: "\nGestion du profil utilisateur authentifié."
+  -
+    name: 'Public verification'
+    description: "\nEndpoint public (sans authentification) pour vérifier l'authenticité d'un certificat."
+components:
+  securitySchemes:
+    default:
+      type: http
+      scheme: bearer
+      description: "Obtenez votre token via `POST /api/v1/auth/login`. Envoyez-le ensuite dans l'en-tête `Authorization: Bearer <token>`."
+security:
+  -
+    default: []
+paths:
+  /api/v1/auth/register:
+    post:
+      summary: "Inscription d'un artiste"
+      operationId: inscriptionDunArtiste
+      description: "Crée un compte artiste, l'attache au rôle `artist` et retourne un token Sanctum."
+      parameters: []
+      responses:
+        201:
+          description: success
+          content:
+            application/json:
+              schema:
+                type: object
+                example:
+                  data:
+                    id: 5
+                    last_name: Diop
+                    first_name: Awa
+                    artist_name: AWA-D
+                    email: awa@test.sn
+                    phone: '+221770000000'
+                    status: ACTIVE
+                    registered_at: '2026-04-25T22:14:23+00:00'
+                    roles:
+                      - artist
+                  token: 5|h6uDj3r2qZr87yKofZNmjXbaz3S3JyWcxXe4j5Eyf9f4fce1
+                properties:
+                  data:
+                    type: object
+                    properties:
+                      id:
+                        type: integer
+                        example: 5
+                      last_name:
+                        type: string
+                        example: Diop
+                      first_name:
+                        type: string
+                        example: Awa
+                      artist_name:
+                        type: string
+                        example: AWA-D
+                      email:
+                        type: string
+                        example: awa@test.sn
+                      phone:
+                        type: string
+                        example: '+221770000000'
+                      status:
+                        type: string
+                        example: ACTIVE
+                      registered_at:
+                        type: string
+                        example: '2026-04-25T22:14:23+00:00'
+                      roles:
+                        type: array
+                        example:
+                          - artist
+                        items:
+                          type: string
+                  token:
+                    type: string
+                    example: 5|h6uDj3r2qZr87yKofZNmjXbaz3S3JyWcxXe4j5Eyf9f4fce1
+      tags:
+        - Authentication
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                last_name:
+                  type: string
+                  description: 'Must not be greater than 120 characters.'
+                  example: b
+                first_name:
+                  type: string
+                  description: 'Must not be greater than 120 characters.'
+                  example: 'n'
+                artist_name:
+                  type: string
+                  description: 'Must not be greater than 120 characters.'
+                  example: g
+                email:
+                  type: string
+                  description: 'Must be a valid email address. Must not be greater than 191 characters.'
+                  example: rowan.gulgowski@example.com
+                password:
+                  type: string
+                  description: ''
+                  example: architecto
+                phone:
+                  type: string
+                  description: 'Must not be greater than 30 characters.'
+                  example: 'n'
+                  nullable: true
+              required:
+                - last_name
+                - first_name
+                - artist_name
+                - email
+                - password
+      security: []
+  /api/v1/auth/login:
+    post:
+      summary: Connexion
+      operationId: connexion
+      description: 'Authentifie un utilisateur et retourne un token Sanctum.'
+      parameters: []
+      responses:
+        200:
+          description: success
+          content:
+            application/json:
+              schema:
+                type: object
+                example:
+                  data:
+                    id: 3
+                    email: awa@caa.sn
+                    roles:
+                      - artist
+                  token: 2|6URd4kiuvxY5pHKFzSnpYbP0LM3XkLattT2rTfCze475f5bb
+                properties:
+                  data:
+                    type: object
+                    properties:
+                      id:
+                        type: integer
+                        example: 3
+                      email:
+                        type: string
+                        example: awa@caa.sn
+                      roles:
+                        type: array
+                        example:
+                          - artist
+                        items:
+                          type: string
+                  token:
+                    type: string
+                    example: 2|6URd4kiuvxY5pHKFzSnpYbP0LM3XkLattT2rTfCze475f5bb
+        422:
+          description: 'invalid credentials'
+          content:
+            application/json:
+              schema:
+                type: object
+                example:
+                  message: 'Identifiants invalides.'
+                  errors:
+                    email:
+                      - 'Identifiants invalides.'
+                properties:
+                  message:
+                    type: string
+                    example: 'Identifiants invalides.'
+                  errors:
+                    type: object
+                    properties:
+                      email:
+                        type: array
+                        example:
+                          - 'Identifiants invalides.'
+                        items:
+                          type: string
+      tags:
+        - Authentication
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                email:
+                  type: string
+                  description: 'Must be a valid email address.'
+                  example: gbailey@example.net
+                password:
+                  type: string
+                  description: ''
+                  example: '|]|{+-'
+                device_name:
+                  type: string
+                  description: 'Must not be greater than 120 characters.'
+                  example: v
+                  nullable: true
+              required:
+                - email
+                - password
+      security: []
+  /api/v1/auth/logout:
+    post:
+      summary: Déconnexion
+      operationId: dconnexion
+      description: 'Révoque le token courant. Passez `all_devices=true` pour révoquer tous les tokens.'
+      parameters: []
+      responses:
+        200:
+          description: ''
+          content:
+            application/json:
+              schema:
+                type: object
+                example:
+                  message: 'Déconnexion réussie.'
+                properties:
+                  message:
+                    type: string
+                    example: 'Déconnexion réussie.'
+      tags:
+        - Authentication
+      requestBody:
+        required: false
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                all_devices:
+                  type: boolean
+                  description: 'Optional. Révoquer tous les tokens.'
+                  example: false
+  /api/v1/certificates:
+    get:
+      summary: 'Lister mes certificats'
+      operationId: listerMesCertificats
+      description: "Retourne les certificats de l'artiste authentifié, paginés par 15."
+      parameters: []
+      responses:
+        401:
+          description: ''
+          content:
+            application/json:
+              schema:
+                type: object
+                example:
+                  message: Unauthenticated.
+                properties:
+                  message:
+                    type: string
+                    example: Unauthenticated.
+      tags:
+        - Certificates
+    post:
+      summary: 'Créer un certificat'
+      operationId: crerUnCertificat
+      description: "Réservé au rôle `artist`. Crée l'œuvre + le client + le certificat (status `PENDING`),\ninitie le paiement (10 000 FCFA) et déclenche le pipeline asynchrone de génération\n(QR, PDF, email). Le certificat passe à `ACTIVE` une fois le paiement confirmé."
+      parameters: []
+      responses:
+        202:
+          description: accepted
+          content:
+            application/json:
+              schema:
+                type: object
+                example:
+                  data:
+                    unique_number: CAA-2026-0001
+                    status: PENDING
+                properties:
+                  data:
+                    type: object
+                    properties:
+                      unique_number:
+                        type: string
+                        example: CAA-2026-0001
+                      status:
+                        type: string
+                        example: PENDING
+      tags:
+        - Certificates
+      requestBody:
+        required: true
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                artwork:
+                  type: object
+                  description: ''
+                  example: []
+                  properties:
+                    title:
+                      type: string
+                      description: 'Must not be greater than 191 characters.'
+                      example: b
+                    type:
+                      type: string
+                      description: ''
+                      example: INSTALLATION
+                      enum:
+                        - PAINTING
+                        - SCULPTURE
+                        - PHOTOGRAPHY
+                        - DRAWING
+                        - ENGRAVING
+                        - DIGITAL_ART
+                        - TEXTILE
+                        - INSTALLATION
+                        - OTHER
+                    technique:
+                      type: string
+                      description: 'Must not be greater than 191 characters.'
+                      example: 'n'
+                      nullable: true
+                    dimensions:
+                      type: string
+                      description: 'Must not be greater than 120 characters.'
+                      example: g
+                      nullable: true
+                    year:
+                      type: integer
+                      description: 'Must be at least 1500. Must not be greater than 2026.'
+                      example: 16
+                      nullable: true
+                    description:
+                      type: string
+                      description: 'Must not be greater than 5000 characters.'
+                      example: 'Velit et fugiat sunt nihil accusantium.'
+                      nullable: true
+                    signature:
+                      type: string
+                      description: 'Must not be greater than 191 characters.'
+                      example: 'n'
+                      nullable: true
+                    image:
+                      type: string
+                      format: binary
+                      description: 'Must be an image. Must not be greater than 5120 kilobytes.'
+                  required:
+                    - title
+                    - type
+                    - image
+                client:
+                  type: object
+                  description: ''
+                  example: []
+                  properties:
+                    last_name:
+                      type: string
+                      description: 'Must not be greater than 120 characters.'
+                      example: i
+                    first_name:
+                      type: string
+                      description: 'Must not be greater than 120 characters.'
+                      example: k
+                    email:
+                      type: string
+                      description: 'Must be a valid email address. Must not be greater than 191 characters.'
+                      example: aschuster@example.com
+                    phone:
+                      type: string
+                      description: 'Must not be greater than 30 characters.'
+                      example: k
+                      nullable: true
+                  required:
+                    - last_name
+                    - first_name
+                    - email
+                payment:
+                  type: object
+                  description: ''
+                  example: []
+                  properties:
+                    method:
+                      type: string
+                      description: ''
+                      example: MTN_MOMO
+                      enum:
+                        - ORANGE_MONEY
+                        - MTN_MOMO
+                        - WAVE
+                        - BANK_CARD
+                  required:
+                    - method
+                'artwork[title]':
+                  type: string
+                  description: "Titre de l'œuvre."
+                  example: 'Soleil de Dakar'
+                'artwork[type]':
+                  type: string
+                  description: "Type d'œuvre."
+                  example: PAINTING
+                'artwork[technique]':
+                  type: string
+                  description: 'Technique utilisée.'
+                  example: 'Acrylique sur toile'
+                'artwork[dimensions]':
+                  type: string
+                  description: Dimensions.
+                  example: '80x60 cm'
+                'artwork[year]':
+                  type: integer
+                  description: 'Année de création.'
+                  example: 2025
+                'artwork[description]':
+                  type: string
+                  description: 'Description longue.'
+                  example: null
+                'artwork[signature]':
+                  type: string
+                  description: "Signature de l'artiste."
+                  example: null
+                'artwork[image]':
+                  type: string
+                  format: binary
+                  description: "Image de l'œuvre (jpg/png/webp, max 5 Mo)."
+                'client[last_name]':
+                  type: string
+                  description: 'Nom du client.'
+                  example: Ndiaye
+                'client[first_name]':
+                  type: string
+                  description: 'Prénom du client.'
+                  example: Mamadou
+                'client[email]':
+                  type: string
+                  description: 'Email du client.'
+                  example: client@test.sn
+                'client[phone]':
+                  type: string
+                  description: 'Téléphone du client.'
+                  example: '+221770000099'
+                'payment[method]':
+                  type: string
+                  description: 'Méthode de paiement.'
+                  example: WAVE
+              required:
+                - 'artwork[title]'
+                - 'artwork[type]'
+                - 'artwork[image]'
+                - 'client[last_name]'
+                - 'client[first_name]'
+                - 'client[email]'
+                - 'payment[method]'
+  '/api/v1/certificates/{certificate_id}':
+    get:
+      summary: 'Voir un certificat'
+      operationId: voirUnCertificat
+      description: "L'artiste voit ses propres certificats ; les admins voient tout."
+      parameters: []
+      responses:
+        401:
+          description: ''
+          content:
+            application/json:
+              schema:
+                type: object
+                example:
+                  message: Unauthenticated.
+                properties:
+                  message:
+                    type: string
+                    example: Unauthenticated.
+      tags:
+        - Certificates
+    parameters:
+      -
+        in: path
+        name: certificate_id
+        description: 'The ID of the certificate.'
+        example: 16
+        required: true
+        schema:
+          type: integer
+      -
+        in: path
+        name: certificate
+        description: 'ID du certificat.'
+        example: 1
+        required: true
+        schema:
+          type: integer
+  '/api/v1/certificates/{certificate_id}/download-link':
+    get:
+      summary: 'Obtenir un lien signé de téléchargement PDF'
+      operationId: obtenirUnLienSignDeTlchargementPDF
+      description: 'Retourne une URL signée valide 1 h vers `/api/v1/download/{id}`.'
+      parameters: []
+      responses:
+        200:
+          description: ''
+          content:
+            application/json:
+              schema:
+                type: object
+                example:
+                  url: 'http://localhost/api/v1/download/1?expires=...&signature=...'
+                  expires_in_seconds: 3600
+                properties:
+                  url:
+                    type: string
+                    example: 'http://localhost/api/v1/download/1?expires=...&signature=...'
+                  expires_in_seconds:
+                    type: integer
+                    example: 3600
+      tags:
+        - Certificates
+    parameters:
+      -
+        in: path
+        name: certificate_id
+        description: 'The ID of the certificate.'
+        example: 16
+        required: true
+        schema:
+          type: integer
+      -
+        in: path
+        name: certificate
+        description: 'ID du certificat.'
+        example: 1
+        required: true
+        schema:
+          type: integer
+  '/api/v1/certificates/{certificate_id}/revoke':
+    post:
+      summary: 'Révoquer un certificat'
+      operationId: rvoquerUnCertificat
+      description: "Réservé aux rôles `admin` et `super_admin`. Le motif est enregistré et notifié\npar email à l'artiste et au client."
+      parameters: []
+      responses: {  }
+      tags:
+        - Certificates
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                reason:
+                  type: string
+                  description: 'Motif détaillé (≥ 10 caractères).'
+                  example: 'Œuvre non authentique selon expertise.'
+              required:
+                - reason
+    parameters:
+      -
+        in: path
+        name: certificate_id
+        description: 'The ID of the certificate.'
+        example: 16
+        required: true
+        schema:
+          type: integer
+      -
+        in: path
+        name: certificate
+        description: 'ID du certificat.'
+        example: 1
+        required: true
+        schema:
+          type: integer
+  /api/v1/profile:
+    get:
+      summary: 'Récupérer le profil courant'
+      operationId: rcuprerLeProfilCourant
+      description: ''
+      parameters: []
+      responses:
+        401:
+          description: ''
+          content:
+            application/json:
+              schema:
+                type: object
+                example:
+                  message: Unauthenticated.
+                properties:
+                  message:
+                    type: string
+                    example: Unauthenticated.
+      tags:
+        - Profile
+  /api/v1/profile/password:
+    patch:
+      summary: 'Modifier le mot de passe'
+      operationId: modifierLeMotDePasse
+      description: 'Nécessite le mot de passe actuel.'
+      parameters: []
+      responses: {  }
+      tags:
+        - Profile
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                current_password:
+                  type: string
+                  description: ''
+                  example: architecto
+                password:
+                  type: string
+                  description: 'The value and <code>current_password</code> must be different.'
+                  example: architecto
+              required:
+                - current_password
+                - password
+  /api/v1/profile/email:
+    patch:
+      summary: "Modifier l'email"
+      operationId: modifierLemail
+      description: 'Le mot de passe actuel doit être fourni en confirmation.'
+      parameters: []
+      responses: {  }
+      tags:
+        - Profile
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                email:
+                  type: string
+                  description: 'Must be a valid email address. Must not be greater than 191 characters.'
+                  example: gbailey@example.net
+                current_password:
+                  type: string
+                  description: ''
+                  example: architecto
+              required:
+                - email
+                - current_password
+  /api/v1/profile/phone:
+    patch:
+      summary: 'Modifier le téléphone'
+      operationId: modifierLeTlphone
+      description: ''
+      parameters: []
+      responses: {  }
+      tags:
+        - Profile
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                phone:
+                  type: string
+                  description: 'Must match the regex /^\+?[0-9\s\-]{6,30}$/. Must not be greater than 30 characters.'
+                  example: b
+              required:
+                - phone
+  '/api/v1/verify/{number}':
+    get:
+      summary: 'Vérifier un certificat'
+      operationId: vrifierUnCertificat
+      description: "Retourne les informations publiques du certificat (sans données sensibles client/paiement).\nLe statut indique si le certificat est `ACTIVE`, `REVOKED` ou `PENDING`."
+      parameters: []
+      responses:
+        200:
+          description: ''
+          content:
+            application/json:
+              schema:
+                type: object
+                example:
+                  data:
+                    unique_number: CAA-2026-0001
+                    status: ACTIVE
+                    is_valid: true
+                    certified_at: '2026-04-25T22:18:53+00:00'
+                    artwork:
+                      title: 'Soleil de Dakar'
+                      type: PAINTING
+                      year: 2025
+                    artist:
+                      artist_name: AWA-D
+                properties:
+                  data:
+                    type: object
+                    properties:
+                      unique_number:
+                        type: string
+                        example: CAA-2026-0001
+                      status:
+                        type: string
+                        example: ACTIVE
+                      is_valid:
+                        type: boolean
+                        example: true
+                      certified_at:
+                        type: string
+                        example: '2026-04-25T22:18:53+00:00'
+                      artwork:
+                        type: object
+                        properties:
+                          title:
+                            type: string
+                            example: 'Soleil de Dakar'
+                          type:
+                            type: string
+                            example: PAINTING
+                          year:
+                            type: integer
+                            example: 2025
+                      artist:
+                        type: object
+                        properties:
+                          artist_name:
+                            type: string
+                            example: AWA-D
+      tags:
+        - 'Public verification'
+      security: []
+    parameters:
+      -
+        in: path
+        name: number
+        description: 'Numéro unique du certificat (format `CAA-YYYY-NNNN`).'
+        example: CAA-2026-0001
+        required: true
+        schema:
+          type: string
+  '/api/v1/download/{certificate_id}':
+    get:
+      summary: 'Télécharger le PDF (URL signée)'
+      operationId: tlchargerLePDFURLSigne
+      description: "URL obtenue via `GET /api/v1/certificates/{id}/download-link`. Lien valide 1 h.\nRetourne le PDF du certificat. 404 si le certificat est révoqué ou si le PDF n'a pas\nencore été généré."
+      parameters:
+        -
+          in: query
+          name: expires
+          description: "Timestamp d'expiration."
+          example: 1777159343
+          required: true
+          schema:
+            type: integer
+            description: "Timestamp d'expiration."
+            example: 1777159343
+        -
+          in: query
+          name: signature
+          description: 'Signature HMAC.'
+          example: 70916c5c1526696627504dd5e90866c163236ced51945ea198887fb2f5da57d1
+          required: true
+          schema:
+            type: string
+            description: 'Signature HMAC.'
+            example: 70916c5c1526696627504dd5e90866c163236ced51945ea198887fb2f5da57d1
+      responses:
+        200:
+          description: success
+          content:
+            text/plain:
+              schema:
+                type: string
+                example: 'PDF binary stream'
+        403:
+          description: 'invalid signature'
+          content:
+            application/json:
+              schema:
+                type: object
+                example:
+                  message: 'Invalid signature.'
+                properties:
+                  message:
+                    type: string
+                    example: 'Invalid signature.'
+        404:
+          description: 'revoked or not ready'
+          content:
+            application/json:
+              schema:
+                type: object
+                example:
+                  message: "Le PDF du certificat n'est pas encore disponible."
+                properties:
+                  message:
+                    type: string
+                    example: "Le PDF du certificat n'est pas encore disponible."
+      tags:
+        - 'Public verification'
+      security: []
+    parameters:
+      -
+        in: path
+        name: certificate_id
+        description: 'The ID of the certificate.'
+        example: 16
+        required: true
+        schema:
+          type: integer
+      -
+        in: path
+        name: certificate
+        description: 'ID du certificat.'
+        example: 1
+        required: true
+        schema:
+          type: integer

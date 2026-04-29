@@ -41,7 +41,7 @@ endpoints:
         headers:
           cache-control: 'no-cache, private'
           content-type: application/json
-          access-control-allow-origin: '*'
+          vary: Origin
         description: null
     responseFields: []
     auth:
@@ -107,7 +107,7 @@ endpoints:
         name: artwork.type
         description: ''
         required: true
-        example: PHOTOGRAPHY
+        example: INSTALLATION
         type: string
         enumValues:
           - PAINTING
@@ -415,7 +415,7 @@ endpoints:
     cleanBodyParameters:
       artwork:
         title: b
-        type: PHOTOGRAPHY
+        type: INSTALLATION
         technique: 'n'
         dimensions: g
         year: 16
@@ -484,7 +484,7 @@ endpoints:
         name: certificate_id
         description: 'The ID of the certificate.'
         required: true
-        example: 1
+        example: 16
         type: integer
         enumValues: []
         exampleWasSpecified: false
@@ -502,7 +502,7 @@ endpoints:
         nullable: false
         deprecated: false
     cleanUrlParameters:
-      certificate_id: 1
+      certificate_id: 16
       certificate: 1
     queryParameters: []
     cleanQueryParameters: []
@@ -517,7 +517,7 @@ endpoints:
         headers:
           cache-control: 'no-cache, private'
           content-type: application/json
-          access-control-allow-origin: '*'
+          vary: Origin
         description: null
     responseFields: []
     auth:
@@ -554,7 +554,7 @@ endpoints:
         name: certificate_id
         description: 'The ID of the certificate.'
         required: true
-        example: 1
+        example: 16
         type: integer
         enumValues: []
         exampleWasSpecified: false
@@ -572,7 +572,7 @@ endpoints:
         nullable: false
         deprecated: false
     cleanUrlParameters:
-      certificate_id: 1
+      certificate_id: 16
       certificate: 1
     queryParameters: []
     cleanQueryParameters: []
@@ -623,7 +623,7 @@ endpoints:
         name: certificate_id
         description: 'The ID of the certificate.'
         required: true
-        example: 1
+        example: 16
         type: integer
         enumValues: []
         exampleWasSpecified: false
@@ -641,7 +641,7 @@ endpoints:
         nullable: false
         deprecated: false
     cleanUrlParameters:
-      certificate_id: 1
+      certificate_id: 16
       certificate: 1
     queryParameters: []
     cleanQueryParameters: []
