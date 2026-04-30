@@ -32,7 +32,7 @@
     <script
       id="api-reference"
       type="application/yaml"
-      data-url="{{ asset('api-docs/openapi.yaml') }}"
+      data-url="{{ str_contains(request()->url(), 'onrender.com') ? secure_asset('api-docs/openapi.yaml') : asset('api-docs/openapi.yaml') }}"
       data-configuration="{{ $config }}"></script>
     <script src="https://cdn.jsdelivr.net/npm/@scalar/api-reference"></script>
   </body>
