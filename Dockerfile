@@ -37,5 +37,8 @@ COPY docker/nginx/default.conf /etc/nginx/sites-available/default
 # Exposer port (Render utilise 8000 souvent)
 EXPOSE 8000
 
+COPY docker/entrypoint.sh /entrypoint.sh
+RUN chmod +x /entrypoint.sh
+
 # Script de démarrage
 CMD ["/entrypoint.sh"]
