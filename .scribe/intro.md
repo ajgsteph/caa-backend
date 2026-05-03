@@ -3,7 +3,7 @@
 API REST de la plateforme CAA (Certificat Authenticité Artiste) — gestion des artistes, œuvres, certificats numériques et vérification publique.
 
 <aside>
-    <strong>Base URL</strong>: <code>http://localhost</code>
+    <strong>Base URL</strong>: <code>http://localhost:8001</code>
 </aside>
 
     Bienvenue sur la documentation de l'API **CAA**.

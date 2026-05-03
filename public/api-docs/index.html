@@ -26,7 +26,7 @@
             </style>
 
     <script>
-        var tryItOutBaseUrl = "http://localhost";
+        var tryItOutBaseUrl = "http://localhost:8001";
         var useCsrf = Boolean();
         var csrfUrl = "/sanctum/csrf-cookie";
     </script>
@@ -145,7 +145,7 @@
     </ul>
 
     <ul class="toc-footer" id="last-updated">
-        <li>Last updated: April 29, 2026</li>
+        <li>Last updated: May 3, 2026</li>
     </ul>
 </div>
 
@@ -155,7 +155,7 @@
         <h1 id="introduction">Introduction</h1>
 <p>API REST de la plateforme CAA (Certificat Authenticité Artiste) — gestion des artistes, œuvres, certificats numériques et vérification publique.</p>
 <aside>
-    <strong>Base URL</strong>: <code>http://localhost</code>
+    <strong>Base URL</strong>: <code>http://localhost:8001</code>
 </aside>
 <pre><code>Bienvenue sur la documentation de l'API **CAA**.
 
@@ -186,7 +186,7 @@ obtenu après `POST /api/v1/auth/register` ou `POST /api/v1/auth/login`.
 
 <div class="bash-example">
     <pre><code class="language-bash">curl --request POST \
-    "http://localhost/api/v1/auth/register" \
+    "http://localhost:8001/api/v1/auth/register" \
     --header "Content-Type: application/json" \
     --header "Accept: application/json" \
     --data "{
@@ -202,7 +202,7 @@ obtenu après `POST /api/v1/auth/register` ou `POST /api/v1/auth/login`.
 
 <div class="javascript-example">
     <pre><code class="language-javascript">const url = new URL(
-    "http://localhost/api/v1/auth/register"
+    "http://localhost:8001/api/v1/auth/register"
 );
 
 const headers = {
@@ -410,7 +410,7 @@ You can check the Dev Tools console for debugging information.</code></pre>
 
 <div class="bash-example">
     <pre><code class="language-bash">curl --request POST \
-    "http://localhost/api/v1/auth/login" \
+    "http://localhost:8001/api/v1/auth/login" \
     --header "Content-Type: application/json" \
     --header "Accept: application/json" \
     --data "{
@@ -423,7 +423,7 @@ You can check the Dev Tools console for debugging information.</code></pre>
 
 <div class="javascript-example">
     <pre><code class="language-javascript">const url = new URL(
-    "http://localhost/api/v1/auth/login"
+    "http://localhost:8001/api/v1/auth/login"
 );
 
 const headers = {
@@ -601,7 +601,7 @@ You can check the Dev Tools console for debugging information.</code></pre>
 
 <div class="bash-example">
     <pre><code class="language-bash">curl --request POST \
-    "http://localhost/api/v1/auth/logout" \
+    "http://localhost:8001/api/v1/auth/logout" \
     --header "Authorization: Bearer {YOUR_TOKEN}" \
     --header "Content-Type: application/json" \
     --header "Accept: application/json" \
@@ -613,7 +613,7 @@ You can check the Dev Tools console for debugging information.</code></pre>
 
 <div class="javascript-example">
     <pre><code class="language-javascript">const url = new URL(
-    "http://localhost/api/v1/auth/logout"
+    "http://localhost:8001/api/v1/auth/logout"
 );
 
 const headers = {
@@ -771,7 +771,7 @@ You can check the Dev Tools console for debugging information.</code></pre>
 
 <div class="bash-example">
     <pre><code class="language-bash">curl --request GET \
-    --get "http://localhost/api/v1/certificates" \
+    --get "http://localhost:8001/api/v1/certificates" \
     --header "Authorization: Bearer {YOUR_TOKEN}" \
     --header "Content-Type: application/json" \
     --header "Accept: application/json"</code></pre></div>
@@ -779,7 +779,7 @@ You can check the Dev Tools console for debugging information.</code></pre>
 
 <div class="javascript-example">
     <pre><code class="language-javascript">const url = new URL(
-    "http://localhost/api/v1/certificates"
+    "http://localhost:8001/api/v1/certificates"
 );
 
 const headers = {
@@ -915,12 +915,12 @@ initie le paiement (10 000 FCFA) et déclenche le pipeline asynchrone de génér
 
 <div class="bash-example">
     <pre><code class="language-bash">curl --request POST \
-    "http://localhost/api/v1/certificates" \
+    "http://localhost:8001/api/v1/certificates" \
     --header "Authorization: Bearer {YOUR_TOKEN}" \
     --header "Content-Type: multipart/form-data" \
     --header "Accept: application/json" \
     --form "artwork[title]=b"\
-    --form "artwork[type]=INSTALLATION"\
+    --form "artwork[type]=TEXTILE"\
     --form "artwork[technique]=n"\
     --form "artwork[dimensions]=g"\
     --form "artwork[year]=16"\
@@ -930,7 +930,7 @@ initie le paiement (10 000 FCFA) et déclenche le pipeline asynchrone de génér
     --form "client[first_name]=k"\
     --form "client[email]=aschuster@example.com"\
     --form "client[phone]=k"\
-    --form "payment[method]=MTN_MOMO"\
+    --form "payment[method]=WAVE"\
     --form "artwork[title]=Soleil de Dakar"\
     --form "artwork[type]=PAINTING"\
     --form "artwork[technique]=Acrylique sur toile"\
@@ -941,13 +941,13 @@ initie le paiement (10 000 FCFA) et déclenche le pipeline asynchrone de génér
     --form "client[email]=client@test.sn"\
     --form "client[phone]=+221770000099"\
     --form "payment[method]=WAVE"\
-    --form "artwork[image]=@/tmp/phprobeigu3sv6bejNnEkl" \
-    --form "artwork[image]=@/tmp/php5nlh169b3gu03BOLNHm" </code></pre></div>
+    --form "artwork[image]=@/tmp/phptuftfhlv7v5labfEopA" \
+    --form "artwork[image]=@/tmp/phpu81re0poco8jfaMheMB" </code></pre></div>
 
 
 <div class="javascript-example">
     <pre><code class="language-javascript">const url = new URL(
-    "http://localhost/api/v1/certificates"
+    "http://localhost:8001/api/v1/certificates"
 );
 
 const headers = {
@@ -958,7 +958,7 @@ const headers = {
 
 const body = new FormData();
 body.append('artwork[title]', 'b');
-body.append('artwork[type]', 'INSTALLATION');
+body.append('artwork[type]', 'TEXTILE');
 body.append('artwork[technique]', 'n');
 body.append('artwork[dimensions]', 'g');
 body.append('artwork[year]', '16');
@@ -968,7 +968,7 @@ body.append('client[last_name]', 'i');
 body.append('client[first_name]', 'k');
 body.append('client[email]', 'aschuster@example.com');
 body.append('client[phone]', 'k');
-body.append('payment[method]', 'MTN_MOMO');
+body.append('payment[method]', 'WAVE');
 body.append('artwork[title]', 'Soleil de Dakar');
 body.append('artwork[type]', 'PAINTING');
 body.append('artwork[technique]', 'Acrylique sur toile');
@@ -1117,10 +1117,10 @@ You can check the Dev Tools console for debugging information.</code></pre>
  &nbsp;
                 <input type="text" style="display: none"
                               name="artwork.type"                data-endpoint="POSTapi-v1-certificates"
-               value="INSTALLATION"
+               value="TEXTILE"
                data-component="body">
     <br>
-<p>Example: <code>INSTALLATION</code></p>
+<p>Example: <code>TEXTILE</code></p>
 Must be one of:
 <ul style="list-style-type: square;"><li><code>PAINTING</code></li> <li><code>SCULPTURE</code></li> <li><code>PHOTOGRAPHY</code></li> <li><code>DRAWING</code></li> <li><code>ENGRAVING</code></li> <li><code>DIGITAL_ART</code></li> <li><code>TEXTILE</code></li> <li><code>INSTALLATION</code></li> <li><code>OTHER</code></li></ul>
                     </div>
@@ -1194,7 +1194,7 @@ Must be one of:
                value=""
                data-component="body">
     <br>
-<p>Must be an image. Must not be greater than 5120 kilobytes. Example: <code>/tmp/phprobeigu3sv6bejNnEkl</code></p>
+<p>Must be an image. Must not be greater than 5120 kilobytes. Example: <code>/tmp/phptuftfhlv7v5labfEopA</code></p>
                     </div>
                                     </details>
         </div>
@@ -1275,10 +1275,10 @@ Must be one of:
  &nbsp;
                 <input type="text" style="display: none"
                               name="payment.method"                data-endpoint="POSTapi-v1-certificates"
-               value="MTN_MOMO"
+               value="WAVE"
                data-component="body">
     <br>
-<p>Example: <code>MTN_MOMO</code></p>
+<p>Example: <code>WAVE</code></p>
 Must be one of:
 <ul style="list-style-type: square;"><li><code>ORANGE_MONEY</code></li> <li><code>MTN_MOMO</code></li> <li><code>WAVE</code></li> <li><code>BANK_CARD</code></li></ul>
                     </div>
@@ -1378,7 +1378,7 @@ Must be one of:
                value=""
                data-component="body">
     <br>
-<p>Image de l'œuvre (jpg/png/webp, max 5 Mo). Example: <code>/tmp/php5nlh169b3gu03BOLNHm</code></p>
+<p>Image de l'œuvre (jpg/png/webp, max 5 Mo). Example: <code>/tmp/phpu81re0poco8jfaMheMB</code></p>
         </div>
                 <div style=" padding-left: 28px;  clear: unset;">
             <b style="line-height: 2;"><code>client[last_name]</code></b>&nbsp;&nbsp;
@@ -1456,7 +1456,7 @@ Must be one of:
 
 <div class="bash-example">
     <pre><code class="language-bash">curl --request GET \
-    --get "http://localhost/api/v1/certificates/16" \
+    --get "http://localhost:8001/api/v1/certificates/16" \
     --header "Authorization: Bearer {YOUR_TOKEN}" \
     --header "Content-Type: application/json" \
     --header "Accept: application/json"</code></pre></div>
@@ -1464,7 +1464,7 @@ Must be one of:
 
 <div class="javascript-example">
     <pre><code class="language-javascript">const url = new URL(
-    "http://localhost/api/v1/certificates/16"
+    "http://localhost:8001/api/v1/certificates/16"
 );
 
 const headers = {
@@ -1623,7 +1623,7 @@ You can check the Dev Tools console for debugging information.</code></pre>
 
 <div class="bash-example">
     <pre><code class="language-bash">curl --request GET \
-    --get "http://localhost/api/v1/certificates/16/download-link" \
+    --get "http://localhost:8001/api/v1/certificates/16/download-link" \
     --header "Authorization: Bearer {YOUR_TOKEN}" \
     --header "Content-Type: application/json" \
     --header "Accept: application/json"</code></pre></div>
@@ -1631,7 +1631,7 @@ You can check the Dev Tools console for debugging information.</code></pre>
 
 <div class="javascript-example">
     <pre><code class="language-javascript">const url = new URL(
-    "http://localhost/api/v1/certificates/16/download-link"
+    "http://localhost:8001/api/v1/certificates/16/download-link"
 );
 
 const headers = {
@@ -1785,7 +1785,7 @@ par email à l'artiste et au client.</p>
 
 <div class="bash-example">
     <pre><code class="language-bash">curl --request POST \
-    "http://localhost/api/v1/certificates/16/revoke" \
+    "http://localhost:8001/api/v1/certificates/16/revoke" \
     --header "Authorization: Bearer {YOUR_TOKEN}" \
     --header "Content-Type: application/json" \
     --header "Accept: application/json" \
@@ -1797,7 +1797,7 @@ par email à l'artiste et au client.</p>
 
 <div class="javascript-example">
     <pre><code class="language-javascript">const url = new URL(
-    "http://localhost/api/v1/certificates/16/revoke"
+    "http://localhost:8001/api/v1/certificates/16/revoke"
 );
 
 const headers = {
@@ -1961,7 +1961,7 @@ You can check the Dev Tools console for debugging information.</code></pre>
 
 <div class="bash-example">
     <pre><code class="language-bash">curl --request GET \
-    --get "http://localhost/api/v1/profile" \
+    --get "http://localhost:8001/api/v1/profile" \
     --header "Authorization: Bearer {YOUR_TOKEN}" \
     --header "Content-Type: application/json" \
     --header "Accept: application/json"</code></pre></div>
@@ -1969,7 +1969,7 @@ You can check the Dev Tools console for debugging information.</code></pre>
 
 <div class="javascript-example">
     <pre><code class="language-javascript">const url = new URL(
-    "http://localhost/api/v1/profile"
+    "http://localhost:8001/api/v1/profile"
 );
 
 const headers = {
@@ -2103,7 +2103,7 @@ You can check the Dev Tools console for debugging information.</code></pre>
 
 <div class="bash-example">
     <pre><code class="language-bash">curl --request PATCH \
-    "http://localhost/api/v1/profile/password" \
+    "http://localhost:8001/api/v1/profile/password" \
     --header "Authorization: Bearer {YOUR_TOKEN}" \
     --header "Content-Type: application/json" \
     --header "Accept: application/json" \
@@ -2116,7 +2116,7 @@ You can check the Dev Tools console for debugging information.</code></pre>
 
 <div class="javascript-example">
     <pre><code class="language-javascript">const url = new URL(
-    "http://localhost/api/v1/profile/password"
+    "http://localhost:8001/api/v1/profile/password"
 );
 
 const headers = {
@@ -2264,7 +2264,7 @@ You can check the Dev Tools console for debugging information.</code></pre>
 
 <div class="bash-example">
     <pre><code class="language-bash">curl --request PATCH \
-    "http://localhost/api/v1/profile/email" \
+    "http://localhost:8001/api/v1/profile/email" \
     --header "Authorization: Bearer {YOUR_TOKEN}" \
     --header "Content-Type: application/json" \
     --header "Accept: application/json" \
@@ -2277,7 +2277,7 @@ You can check the Dev Tools console for debugging information.</code></pre>
 
 <div class="javascript-example">
     <pre><code class="language-javascript">const url = new URL(
-    "http://localhost/api/v1/profile/email"
+    "http://localhost:8001/api/v1/profile/email"
 );
 
 const headers = {
@@ -2425,7 +2425,7 @@ You can check the Dev Tools console for debugging information.</code></pre>
 
 <div class="bash-example">
     <pre><code class="language-bash">curl --request PATCH \
-    "http://localhost/api/v1/profile/phone" \
+    "http://localhost:8001/api/v1/profile/phone" \
     --header "Authorization: Bearer {YOUR_TOKEN}" \
     --header "Content-Type: application/json" \
     --header "Accept: application/json" \
@@ -2437,7 +2437,7 @@ You can check the Dev Tools console for debugging information.</code></pre>
 
 <div class="javascript-example">
     <pre><code class="language-javascript">const url = new URL(
-    "http://localhost/api/v1/profile/phone"
+    "http://localhost:8001/api/v1/profile/phone"
 );
 
 const headers = {
@@ -2576,14 +2576,14 @@ Le statut indique si le certificat est <code>ACTIVE</code>, <code>REVOKED</code>
 
 <div class="bash-example">
     <pre><code class="language-bash">curl --request GET \
-    --get "http://localhost/api/v1/verify/CAA-2026-0001" \
+    --get "http://localhost:8001/api/v1/verify/CAA-2026-0001" \
     --header "Content-Type: application/json" \
     --header "Accept: application/json"</code></pre></div>
 
 
 <div class="javascript-example">
     <pre><code class="language-javascript">const url = new URL(
-    "http://localhost/api/v1/verify/CAA-2026-0001"
+    "http://localhost:8001/api/v1/verify/CAA-2026-0001"
 );
 
 const headers = {
@@ -2724,14 +2724,14 @@ encore été généré.</p>
 
 <div class="bash-example">
     <pre><code class="language-bash">curl --request GET \
-    --get "http://localhost/api/v1/download/16?expires=1777159343&amp;signature=70916c5c1526696627504dd5e90866c163236ced51945ea198887fb2f5da57d1" \
+    --get "http://localhost:8001/api/v1/download/16?expires=1777159343&amp;signature=70916c5c1526696627504dd5e90866c163236ced51945ea198887fb2f5da57d1" \
     --header "Content-Type: application/json" \
     --header "Accept: application/json"</code></pre></div>
 
 
 <div class="javascript-example">
     <pre><code class="language-javascript">const url = new URL(
-    "http://localhost/api/v1/download/16"
+    "http://localhost:8001/api/v1/download/16"
 );
 
 const params = {

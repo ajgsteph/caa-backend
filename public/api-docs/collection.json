@@ -5,12 +5,12 @@
             "key": "baseUrl",
             "type": "string",
             "name": "string",
-            "value": "http:\/\/localhost"
+            "value": "http:\/\/localhost:8001"
         }
     ],
     "info": {
         "name": "CAA \u2014 API Documentation",
-        "_postman_id": "c34c5aec-bff8-4b7f-9294-a6d279c0a963",
+        "_postman_id": "7358fb52-8a6a-47dd-97c7-f157d759c302",
         "description": "API REST de la plateforme CAA (Certificat Authenticit\u00e9 Artiste) \u2014 gestion des artistes, \u0153uvres, certificats num\u00e9riques et v\u00e9rification publique.",
         "schema": "https:\/\/schema.getpostman.com\/json\/collection\/v2.1.0\/collection.json"
     },
@@ -218,7 +218,7 @@
                                 },
                                 {
                                     "key": "artwork[type]",
-                                    "value": "INSTALLATION",
+                                    "value": "TEXTILE",
                                     "type": "text",
                                     "description": ""
                                 },
@@ -278,7 +278,7 @@
                                 },
                                 {
                                     "key": "payment[method]",
-                                    "value": "MTN_MOMO",
+                                    "value": "WAVE",
                                     "type": "text",
                                     "description": ""
                                 },

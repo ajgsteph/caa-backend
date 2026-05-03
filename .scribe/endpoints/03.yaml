@@ -105,7 +105,7 @@ endpoints:
         name: artwork.type
         description: ''
         required: true
-        example: INSTALLATION
+        example: TEXTILE
         type: string
         enumValues:
           - PAINTING
@@ -257,7 +257,7 @@ endpoints:
         name: payment.method
         description: ''
         required: true
-        example: MTN_MOMO
+        example: WAVE
         type: string
         enumValues:
           - ORANGE_MONEY
@@ -413,7 +413,7 @@ endpoints:
     cleanBodyParameters:
       artwork:
         title: b
-        type: INSTALLATION
+        type: TEXTILE
         technique: 'n'
         dimensions: g
         year: 16
@@ -425,7 +425,7 @@ endpoints:
         email: aschuster@example.com
         phone: k
       payment:
-        method: MTN_MOMO
+        method: WAVE
       'artwork[title]': 'Soleil de Dakar'
       'artwork[type]': PAINTING
       'artwork[technique]': 'Acrylique sur toile'
