@@ -19,9 +19,7 @@ return [
 
   'allowed_methods' => ['*'],
 
-  'allowed_origins' => is_array(env('CORS_ALLOWED_ORIGINS'))
-    ? env('CORS_ALLOWED_ORIGINS')
-    : explode(',', env('CORS_ALLOWED_ORIGINS', '')),
+  'allowed_origins' => ['http://localhost:5173', 'http://localhost:3000', 'https://caa-backend-603u.onrender.com', 'https://caa-frontend-delta.vercel.app'],
 
   'allowed_origins_patterns' => ['#^http://localhost(:\d+)?$#'],
 
