@@ -3,6 +3,7 @@
 use App\Enums\UserRole;
 use App\Http\Controllers\Auth\AuthController;
 use App\Http\Controllers\Auth\ProfileController;
+use App\Http\Controllers\ArtworkController;
 use App\Http\Controllers\CertificateController;
 use App\Http\Controllers\DownloadController;
 use App\Http\Controllers\PublicVerificationController;
@@ -33,6 +34,12 @@ Route::prefix('v1')->group(function (): void {
 
         // Artist endpoints
         Route::middleware('role:'.UserRole::ARTIST->value)->group(function (): void {
+            Route::get('artworks', [ArtworkController::class, 'index']);
+            Route::post('artworks', [ArtworkController::class, 'store']);
+            Route::get('artworks/{artwork}', [ArtworkController::class, 'show']);
+            Route::post('artworks/{artwork}', [ArtworkController::class, 'update']);
+            Route::delete('artworks/{artwork}', [ArtworkController::class, 'destroy']);
+
             Route::get('certificates', [CertificateController::class, 'index']);
             Route::post('certificates', [CertificateController::class, 'store']);
             Route::get('certificates/{certificate}', [CertificateController::class, 'show']);

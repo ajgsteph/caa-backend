@@ -2,9 +2,9 @@
 
 namespace App\Http\Requests\Certificate;
 
-use App\Enums\ArtworkType;
 use App\Enums\PaymentMethod;
 use App\Enums\UserRole;
+use App\Models\Artwork;
 use Illuminate\Contracts\Validation\Validator;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rule;
@@ -21,15 +21,12 @@ class CreateCertificateRequest extends FormRequest
     public function rules(): array
     {
         return [
-            // Artwork
-            'artwork.title' => ['required', 'string', 'max:191'],
-            'artwork.type' => ['required', Rule::enum(ArtworkType::class)],
-            'artwork.technique' => ['nullable', 'string', 'max:191'],
-            'artwork.dimensions' => ['nullable', 'string', 'max:120'],
-            'artwork.year' => ['nullable', 'integer', 'min:1500', 'max:'.(int) date('Y')],
-            'artwork.description' => ['nullable', 'string', 'max:5000'],
-            'artwork.signature' => ['nullable', 'string', 'max:191'],
-            'artwork.image' => ['required', 'image', 'mimes:jpg,jpeg,png,webp', 'max:5120'],
+            // Œuvre existante appartenant à l'artiste
+            'artwork_id' => [
+                'required',
+                'integer',
+                Rule::exists('artworks', 'id')->where('artist_id', $this->user()->id),
+            ],
 
             // Client
             'client.last_name' => ['required', 'string', 'max:120'],
@@ -45,8 +42,9 @@ class CreateCertificateRequest extends FormRequest
     public function withValidator(Validator $validator): void
     {
         $validator->after(function (Validator $v): void {
-            if (! $this->hasFile('artwork.image')) {
-                $v->errors()->add('artwork.image', 'L\'image de l\'œuvre est requise.');
+            $artworkId = $this->integer('artwork_id');
+            if ($artworkId && Artwork::where('id', $artworkId)->whereHas('certificate')->exists()) {
+                $v->errors()->add('artwork_id', 'Cette œuvre possède déjà un certificat.');
             }
         });
     }

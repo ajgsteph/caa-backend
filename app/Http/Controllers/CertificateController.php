@@ -46,14 +46,7 @@ class CertificateController extends Controller
      * initie le paiement (10 000 FCFA) et déclenche le pipeline asynchrone de génération
      * (QR, PDF, email). Le certificat passe à `ACTIVE` une fois le paiement confirmé.
      *
-     * @bodyParam artwork[title] string required Titre de l'œuvre. Example: Soleil de Dakar
-     * @bodyParam artwork[type] string required Type d'œuvre. Example: PAINTING
-     * @bodyParam artwork[technique] string Technique utilisée. Example: Acrylique sur toile
-     * @bodyParam artwork[dimensions] string Dimensions. Example: 80x60 cm
-     * @bodyParam artwork[year] integer Année de création. Example: 2025
-     * @bodyParam artwork[description] string Description longue. No-example
-     * @bodyParam artwork[signature] string Signature de l'artiste. No-example
-     * @bodyParam artwork[image] file required Image de l'œuvre (jpg/png/webp, max 5 Mo).
+     * @bodyParam artwork_id integer required ID de l'œuvre existante appartenant à l'artiste. Example: 1
      * @bodyParam client[last_name] string required Nom du client. Example: Ndiaye
      * @bodyParam client[first_name] string required Prénom du client. Example: Mamadou
      * @bodyParam client[email] string required Email du client. Example: client@test.sn
@@ -67,7 +60,6 @@ class CertificateController extends Controller
         $certificate = $action->execute(
             $request->user(),
             $request->validated(),
-            $request->file('artwork.image'),
         );
 
         return CertificateResource::make($certificate)->response()->setStatusCode(202);

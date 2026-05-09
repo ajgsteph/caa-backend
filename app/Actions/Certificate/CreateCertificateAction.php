@@ -2,29 +2,27 @@
 
 namespace App\Actions\Certificate;
 
-use App\Actions\Artwork\SaveArtworkAction;
 use App\Actions\Client\FindOrCreateClientAction;
 use App\Actions\Payment\InitiatePaymentAction;
 use App\Enums\CertificateStatus;
 use App\Enums\PaymentMethod;
+use App\Models\Artwork;
 use App\Models\Certificate;
 use App\Models\User;
-use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\DB;
 
 class CreateCertificateAction
 {
     public function __construct(
-        private readonly SaveArtworkAction $saveArtwork,
         private readonly FindOrCreateClientAction $findOrCreateClient,
         private readonly GenerateUniqueNumberAction $generateUniqueNumber,
         private readonly InitiatePaymentAction $initiatePayment,
     ) {}
 
-    public function execute(User $artist, array $payload, ?UploadedFile $image): Certificate
+    public function execute(User $artist, array $payload): Certificate
     {
-        return DB::transaction(function () use ($artist, $payload, $image): Certificate {
-            $artwork = $this->saveArtwork->execute($artist, $payload['artwork'], $image);
+        return DB::transaction(function () use ($artist, $payload): Certificate {
+            $artwork = Artwork::findOrFail($payload['artwork_id']);
             $client = $this->findOrCreateClient->execute($payload['client']);
             $number = $this->generateUniqueNumber->execute();
 
