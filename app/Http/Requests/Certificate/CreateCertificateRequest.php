@@ -25,7 +25,7 @@ class CreateCertificateRequest extends FormRequest
             'artwork_id' => [
                 'required',
                 'integer',
-                Rule::exists('artworks', 'id')->where('artist_id', $this->user()->id),
+                Rule::exists('artworks', 'id')->where('artist_id', $this->user()?->id),
             ],
 
             // Client
