@@ -5,7 +5,7 @@ info:
   version: 1.0.0
 servers:
   -
-    url: 'http://localhost:8001'
+    url: 'http://localhost:8000'
 tags:
   -
     name: Authentication
@@ -19,6 +19,9 @@ tags:
   -
     name: 'Public verification'
     description: "\nEndpoint public (sans authentification) pour vérifier l'authenticité d'un certificat."
+  -
+    name: Œuvres
+    description: "\nGestion des œuvres d'art de l'artiste authentifié."
 components:
   securitySchemes:
     default:
@@ -207,16 +210,16 @@ paths:
               properties:
                 email:
                   type: string
-                  description: 'Must be a valid email address.'
-                  example: gbailey@example.net
+                  description: "Email de l'utilisateur."
+                  example: awa@caa.sn
                 password:
                   type: string
-                  description: ''
-                  example: '|]|{+-'
+                  description: "Mot de passe de l'utilisateur."
+                  example: awapass
                 device_name:
                   type: string
-                  description: 'Must not be greater than 120 characters.'
-                  example: v
+                  description: "Nom de l'appareil ou du client API."
+                  example: scalar
                   nullable: true
               required:
                 - email
@@ -306,66 +309,14 @@ paths:
       requestBody:
         required: true
         content:
-          multipart/form-data:
+          application/json:
             schema:
               type: object
               properties:
-                artwork:
-                  type: object
-                  description: ''
-                  example: []
-                  properties:
-                    title:
-                      type: string
-                      description: 'Must not be greater than 191 characters.'
-                      example: b
-                    type:
-                      type: string
-                      description: ''
-                      example: TEXTILE
-                      enum:
-                        - PAINTING
-                        - SCULPTURE
-                        - PHOTOGRAPHY
-                        - DRAWING
-                        - ENGRAVING
-                        - DIGITAL_ART
-                        - TEXTILE
-                        - INSTALLATION
-                        - OTHER
-                    technique:
-                      type: string
-                      description: 'Must not be greater than 191 characters.'
-                      example: 'n'
-                      nullable: true
-                    dimensions:
-                      type: string
-                      description: 'Must not be greater than 120 characters.'
-                      example: g
-                      nullable: true
-                    year:
-                      type: integer
-                      description: 'Must be at least 1500. Must not be greater than 2026.'
-                      example: 16
-                      nullable: true
-                    description:
-                      type: string
-                      description: 'Must not be greater than 5000 characters.'
-                      example: 'Velit et fugiat sunt nihil accusantium.'
-                      nullable: true
-                    signature:
-                      type: string
-                      description: 'Must not be greater than 191 characters.'
-                      example: 'n'
-                      nullable: true
-                    image:
-                      type: string
-                      format: binary
-                      description: 'Must be an image. Must not be greater than 5120 kilobytes.'
-                  required:
-                    - title
-                    - type
-                    - image
+                artwork_id:
+                  type: integer
+                  description: "ID de l'œuvre existante appartenant à l'artiste."
+                  example: 1
                 client:
                   type: object
                   description: ''
@@ -374,19 +325,19 @@ paths:
                     last_name:
                       type: string
                       description: 'Must not be greater than 120 characters.'
-                      example: i
+                      example: 'n'
                     first_name:
                       type: string
                       description: 'Must not be greater than 120 characters.'
-                      example: k
+                      example: g
                     email:
                       type: string
                       description: 'Must be a valid email address. Must not be greater than 191 characters.'
-                      example: aschuster@example.com
+                      example: rowan.gulgowski@example.com
                     phone:
                       type: string
                       description: 'Must not be greater than 30 characters.'
-                      example: k
+                      example: d
                       nullable: true
                   required:
                     - last_name
@@ -400,7 +351,7 @@ paths:
                     method:
                       type: string
                       description: ''
-                      example: WAVE
+                      example: ORANGE_MONEY
                       enum:
                         - ORANGE_MONEY
                         - MTN_MOMO
@@ -408,38 +359,6 @@ paths:
                         - BANK_CARD
                   required:
                     - method
-                'artwork[title]':
-                  type: string
-                  description: "Titre de l'œuvre."
-                  example: 'Soleil de Dakar'
-                'artwork[type]':
-                  type: string
-                  description: "Type d'œuvre."
-                  example: PAINTING
-                'artwork[technique]':
-                  type: string
-                  description: 'Technique utilisée.'
-                  example: 'Acrylique sur toile'
-                'artwork[dimensions]':
-                  type: string
-                  description: Dimensions.
-                  example: '80x60 cm'
-                'artwork[year]':
-                  type: integer
-                  description: 'Année de création.'
-                  example: 2025
-                'artwork[description]':
-                  type: string
-                  description: 'Description longue.'
-                  example: null
-                'artwork[signature]':
-                  type: string
-                  description: "Signature de l'artiste."
-                  example: null
-                'artwork[image]':
-                  type: string
-                  format: binary
-                  description: "Image de l'œuvre (jpg/png/webp, max 5 Mo)."
                 'client[last_name]':
                   type: string
                   description: 'Nom du client.'
@@ -461,9 +380,7 @@ paths:
                   description: 'Méthode de paiement.'
                   example: WAVE
               required:
-                - 'artwork[title]'
-                - 'artwork[type]'
-                - 'artwork[image]'
+                - artwork_id
                 - 'client[last_name]'
                 - 'client[first_name]'
                 - 'client[email]'
@@ -829,6 +746,225 @@ paths:
         in: path
         name: certificate
         description: 'ID du certificat.'
+        example: 1
+        required: true
+        schema:
+          type: integer
+  /api/v1/artworks:
+    get:
+      summary: 'Lister mes œuvres'
+      operationId: listerMesuvres
+      description: "Retourne les œuvres de l'artiste authentifié, paginées par 15."
+      parameters: []
+      responses:
+        401:
+          description: ''
+          content:
+            application/json:
+              schema:
+                type: object
+                example:
+                  message: Unauthenticated.
+                properties:
+                  message:
+                    type: string
+                    example: Unauthenticated.
+      tags:
+        - Œuvres
+    post:
+      summary: 'Créer une œuvre'
+      operationId: crerUneuvre
+      description: 'Réservé au rôle `artist`.'
+      parameters: []
+      responses:
+        201:
+          description: created
+          content:
+            application/json:
+              schema:
+                type: object
+                example:
+                  data:
+                    id: 1
+                    title: 'Soleil de Dakar'
+                    type: PAINTING
+                properties:
+                  data:
+                    type: object
+                    properties:
+                      id:
+                        type: integer
+                        example: 1
+                      title:
+                        type: string
+                        example: 'Soleil de Dakar'
+                      type:
+                        type: string
+                        example: PAINTING
+      tags:
+        - Œuvres
+      requestBody:
+        required: true
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                title:
+                  type: string
+                  description: "Titre de l'œuvre."
+                  example: 'Soleil de Dakar'
+                type:
+                  type: string
+                  description: "Type d'œuvre (PAINTING, SCULPTURE, PHOTOGRAPHY, DRAWING, ENGRAVING, DIGITAL_ART, TEXTILE, INSTALLATION, OTHER)."
+                  example: PAINTING
+                technique:
+                  type: string
+                  description: 'Technique utilisée.'
+                  example: 'Acrylique sur toile'
+                  nullable: true
+                dimensions:
+                  type: string
+                  description: Dimensions.
+                  example: '80x60 cm'
+                  nullable: true
+                year:
+                  type: integer
+                  description: 'Année de création.'
+                  example: 2025
+                  nullable: true
+                description:
+                  type: string
+                  description: 'Description longue.'
+                  example: null
+                  nullable: true
+                signature:
+                  type: string
+                  description: "Signature de l'artiste."
+                  example: null
+                  nullable: true
+                image:
+                  type: string
+                  format: binary
+                  description: "Image de l'œuvre (jpg/jpeg/png/webp, max 5 Mo)."
+                  nullable: true
+              required:
+                - title
+                - type
+  '/api/v1/artworks/{artwork_id}':
+    get:
+      summary: 'Voir une œuvre'
+      operationId: voirUneuvre
+      description: ''
+      parameters: []
+      responses:
+        401:
+          description: ''
+          content:
+            application/json:
+              schema:
+                type: object
+                example:
+                  message: Unauthenticated.
+                properties:
+                  message:
+                    type: string
+                    example: Unauthenticated.
+      tags:
+        - Œuvres
+    post:
+      summary: 'Modifier une œuvre'
+      operationId: modifierUneuvre
+      description: "Réservé au rôle `artist`. L'artiste ne peut modifier que ses propres œuvres."
+      parameters: []
+      responses: {  }
+      tags:
+        - Œuvres
+      requestBody:
+        required: false
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                title:
+                  type: string
+                  description: "Titre de l'œuvre."
+                  example: 'Soleil de Dakar'
+                type:
+                  type: string
+                  description: "Type d'œuvre."
+                  example: PAINTING
+                technique:
+                  type: string
+                  description: 'Technique utilisée.'
+                  example: 'Acrylique sur toile'
+                  nullable: true
+                dimensions:
+                  type: string
+                  description: Dimensions.
+                  example: '80x60 cm'
+                  nullable: true
+                year:
+                  type: integer
+                  description: 'Année de création.'
+                  example: 2025
+                  nullable: true
+                description:
+                  type: string
+                  description: 'Description longue.'
+                  example: null
+                  nullable: true
+                signature:
+                  type: string
+                  description: "Signature de l'artiste."
+                  example: null
+                  nullable: true
+                image:
+                  type: string
+                  format: binary
+                  description: 'Nouvelle image (jpg/jpeg/png/webp, max 5 Mo).'
+                  nullable: true
+    delete:
+      summary: 'Supprimer une œuvre'
+      operationId: supprimerUneuvre
+      description: 'Réservé au rôle `artist`. Impossible si un certificat est déjà associé à cette œuvre.'
+      parameters: []
+      responses:
+        204:
+          description: supprimée
+          content:
+            text/plain:
+              schema:
+                type: string
+                example: ''
+        422:
+          description: 'certificat existant'
+          content:
+            application/json:
+              schema:
+                type: object
+                example:
+                  message: 'Impossible de supprimer une œuvre liée à un certificat.'
+                properties:
+                  message:
+                    type: string
+                    example: 'Impossible de supprimer une œuvre liée à un certificat.'
+      tags:
+        - Œuvres
+    parameters:
+      -
+        in: path
+        name: artwork_id
+        description: 'The ID of the artwork.'
+        example: 16
+        required: true
+        schema:
+          type: integer
+      -
+        in: path
+        name: artwork
+        description: "ID de l'œuvre."
         example: 1
         required: true
         schema:

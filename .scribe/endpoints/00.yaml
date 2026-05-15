@@ -156,40 +156,40 @@ endpoints:
       email:
         custom: []
         name: email
-        description: 'Must be a valid email address.'
+        description: "Email de l'utilisateur."
         required: true
-        example: gbailey@example.net
+        example: awa@caa.sn
         type: string
         enumValues: []
-        exampleWasSpecified: false
+        exampleWasSpecified: true
         nullable: false
         deprecated: false
       password:
         custom: []
         name: password
-        description: ''
+        description: "Mot de passe de l'utilisateur."
         required: true
-        example: '|]|{+-'
+        example: awapass
         type: string
         enumValues: []
-        exampleWasSpecified: false
+        exampleWasSpecified: true
         nullable: false
         deprecated: false
       device_name:
         custom: []
         name: device_name
-        description: 'Must not be greater than 120 characters.'
+        description: "Nom de l'appareil ou du client API."
         required: false
-        example: v
+        example: scalar
         type: string
         enumValues: []
-        exampleWasSpecified: false
+        exampleWasSpecified: true
         nullable: true
         deprecated: false
     cleanBodyParameters:
-      email: gbailey@example.net
-      password: '|]|{+-'
-      device_name: v
+      email: awa@caa.sn
+      password: awapass
+      device_name: scalar
     fileParameters: []
     responses:
       -

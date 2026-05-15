@@ -5,12 +5,12 @@
             "key": "baseUrl",
             "type": "string",
             "name": "string",
-            "value": "http:\/\/localhost:8001"
+            "value": "http:\/\/localhost:8000"
         }
     ],
     "info": {
         "name": "CAA \u2014 API Documentation",
-        "_postman_id": "7358fb52-8a6a-47dd-97c7-f157d759c302",
+        "_postman_id": "458bd4c0-44aa-47d9-b53d-ce4930af0d84",
         "description": "API REST de la plateforme CAA (Certificat Authenticit\u00e9 Artiste) \u2014 gestion des artistes, \u0153uvres, certificats num\u00e9riques et v\u00e9rification publique.",
         "schema": "https:\/\/schema.getpostman.com\/json\/collection\/v2.1.0\/collection.json"
     },
@@ -79,7 +79,7 @@
                         ],
                         "body": {
                             "mode": "raw",
-                            "raw": "{\"email\":\"gbailey@example.net\",\"password\":\"|]|{+-\",\"device_name\":\"v\"}"
+                            "raw": "{\"email\":\"awa@caa.sn\",\"password\":\"awapass\",\"device_name\":\"scalar\"}"
                         },
                         "description": "Authentifie un utilisateur et retourne un token Sanctum.",
                         "auth": {
@@ -200,7 +200,7 @@
                         "header": [
                             {
                                 "key": "Content-Type",
-                                "value": "multipart\/form-data"
+                                "value": "application\/json"
                             },
                             {
                                 "key": "Accept",
@@ -208,151 +208,8 @@
                             }
                         ],
                         "body": {
-                            "mode": "formdata",
-                            "formdata": [
-                                {
-                                    "key": "artwork[title]",
-                                    "value": "b",
-                                    "type": "text",
-                                    "description": ""
-                                },
-                                {
-                                    "key": "artwork[type]",
-                                    "value": "TEXTILE",
-                                    "type": "text",
-                                    "description": ""
-                                },
-                                {
-                                    "key": "artwork[technique]",
-                                    "value": "n",
-                                    "type": "text",
-                                    "description": ""
-                                },
-                                {
-                                    "key": "artwork[dimensions]",
-                                    "value": "g",
-                                    "type": "text",
-                                    "description": ""
-                                },
-                                {
-                                    "key": "artwork[year]",
-                                    "value": "16",
-                                    "type": "text",
-                                    "description": ""
-                                },
-                                {
-                                    "key": "artwork[description]",
-                                    "value": "Velit et fugiat sunt nihil accusantium.",
-                                    "type": "text",
-                                    "description": ""
-                                },
-                                {
-                                    "key": "artwork[signature]",
-                                    "value": "n",
-                                    "type": "text",
-                                    "description": ""
-                                },
-                                {
-                                    "key": "client[last_name]",
-                                    "value": "i",
-                                    "type": "text",
-                                    "description": ""
-                                },
-                                {
-                                    "key": "client[first_name]",
-                                    "value": "k",
-                                    "type": "text",
-                                    "description": ""
-                                },
-                                {
-                                    "key": "client[email]",
-                                    "value": "aschuster@example.com",
-                                    "type": "text",
-                                    "description": ""
-                                },
-                                {
-                                    "key": "client[phone]",
-                                    "value": "k",
-                                    "type": "text",
-                                    "description": ""
-                                },
-                                {
-                                    "key": "payment[method]",
-                                    "value": "WAVE",
-                                    "type": "text",
-                                    "description": ""
-                                },
-                                {
-                                    "key": "artwork[title]",
-                                    "value": "Soleil de Dakar",
-                                    "type": "text",
-                                    "description": "Titre de l'\u0153uvre."
-                                },
-                                {
-                                    "key": "artwork[type]",
-                                    "value": "PAINTING",
-                                    "type": "text",
-                                    "description": "Type d'\u0153uvre."
-                                },
-                                {
-                                    "key": "artwork[technique]",
-                                    "value": "Acrylique sur toile",
-                                    "type": "text",
-                                    "description": "Technique utilis\u00e9e."
-                                },
-                                {
-                                    "key": "artwork[dimensions]",
-                                    "value": "80x60 cm",
-                                    "type": "text",
-                                    "description": "Dimensions."
-                                },
-                                {
-                                    "key": "artwork[year]",
-                                    "value": "2025",
-                                    "type": "text",
-                                    "description": "Ann\u00e9e de cr\u00e9ation."
-                                },
-                                {
-                                    "key": "client[last_name]",
-                                    "value": "Ndiaye",
-                                    "type": "text",
-                                    "description": "Nom du client."
-                                },
-                                {
-                                    "key": "client[first_name]",
-                                    "value": "Mamadou",
-                                    "type": "text",
-                                    "description": "Pr\u00e9nom du client."
-                                },
-                                {
-                                    "key": "client[email]",
-                                    "value": "client@test.sn",
-                                    "type": "text",
-                                    "description": "Email du client."
-                                },
-                                {
-                                    "key": "client[phone]",
-                                    "value": "+221770000099",
-                                    "type": "text",
-                                    "description": "T\u00e9l\u00e9phone du client."
-                                },
-                                {
-                                    "key": "payment[method]",
-                                    "value": "WAVE",
-                                    "type": "text",
-                                    "description": "M\u00e9thode de paiement."
-                                },
-                                {
-                                    "key": "artwork[image]",
-                                    "src": [],
-                                    "type": "file"
-                                },
-                                {
-                                    "key": "artwork[image]",
-                                    "src": [],
-                                    "type": "file"
-                                }
-                            ]
+                            "mode": "raw",
+                            "raw": "{\"artwork_id\":1,\"client\":{\"last_name\":\"n\",\"first_name\":\"g\",\"email\":\"rowan.gulgowski@example.com\",\"phone\":\"d\"},\"payment\":{\"method\":\"ORANGE_MONEY\"},\"client[last_name]\":\"Ndiaye\",\"client[first_name]\":\"Mamadou\",\"client[email]\":\"client@test.sn\",\"client[phone]\":\"+221770000099\",\"payment[method]\":\"WAVE\"}"
                         },
                         "description": "R\u00e9serv\u00e9 au r\u00f4le `artist`. Cr\u00e9e l'\u0153uvre + le client + le certificat (status `PENDING`),\ninitie le paiement (10 000 FCFA) et d\u00e9clenche le pipeline asynchrone de g\u00e9n\u00e9ration\n(QR, PDF, email). Le certificat passe \u00e0 `ACTIVE` une fois le paiement confirm\u00e9."
                     },
@@ -767,6 +624,245 @@
                             "code": 404,
                             "body": "{\"message\": \"Le PDF du certificat n'est pas encore disponible.\"}",
                             "name": "revoked or not ready"
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "name": "\u0152uvres",
+            "description": "\nGestion des \u0153uvres d'art de l'artiste authentifi\u00e9.",
+            "item": [
+                {
+                    "name": "Lister mes \u0153uvres",
+                    "request": {
+                        "url": {
+                            "host": "{{baseUrl}}",
+                            "path": "api\/v1\/artworks",
+                            "query": [],
+                            "raw": "{{baseUrl}}\/api\/v1\/artworks"
+                        },
+                        "method": "GET",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application\/json"
+                            },
+                            {
+                                "key": "Accept",
+                                "value": "application\/json"
+                            }
+                        ],
+                        "body": null,
+                        "description": "Retourne les \u0153uvres de l'artiste authentifi\u00e9, pagin\u00e9es par 15."
+                    },
+                    "response": [
+                        {
+                            "header": [
+                                {
+                                    "key": "cache-control",
+                                    "value": "no-cache, private"
+                                },
+                                {
+                                    "key": "content-type",
+                                    "value": "application\/json"
+                                },
+                                {
+                                    "key": "vary",
+                                    "value": "Origin"
+                                }
+                            ],
+                            "code": 401,
+                            "body": "{\"message\":\"Unauthenticated.\"}",
+                            "name": ""
+                        }
+                    ]
+                },
+                {
+                    "name": "Cr\u00e9er une \u0153uvre",
+                    "request": {
+                        "url": {
+                            "host": "{{baseUrl}}",
+                            "path": "api\/v1\/artworks",
+                            "query": [],
+                            "raw": "{{baseUrl}}\/api\/v1\/artworks"
+                        },
+                        "method": "POST",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application\/json"
+                            },
+                            {
+                                "key": "Accept",
+                                "value": "application\/json"
+                            }
+                        ],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\"title\":\"Soleil de Dakar\",\"type\":\"PAINTING\",\"technique\":\"Acrylique sur toile\",\"dimensions\":\"80x60 cm\",\"year\":2025}"
+                        },
+                        "description": "R\u00e9serv\u00e9 au r\u00f4le `artist`."
+                    },
+                    "response": [
+                        {
+                            "header": [],
+                            "code": 201,
+                            "body": "{\"data\": {\"id\": 1, \"title\": \"Soleil de Dakar\", \"type\": \"PAINTING\"}}",
+                            "name": "created"
+                        }
+                    ]
+                },
+                {
+                    "name": "Voir une \u0153uvre",
+                    "request": {
+                        "url": {
+                            "host": "{{baseUrl}}",
+                            "path": "api\/v1\/artworks\/:artwork_id",
+                            "query": [],
+                            "raw": "{{baseUrl}}\/api\/v1\/artworks\/:artwork_id",
+                            "variable": [
+                                {
+                                    "id": "artwork_id",
+                                    "key": "artwork_id",
+                                    "value": "16",
+                                    "description": "The ID of the artwork."
+                                },
+                                {
+                                    "id": "artwork",
+                                    "key": "artwork",
+                                    "value": "1",
+                                    "description": "ID de l'\u0153uvre."
+                                }
+                            ]
+                        },
+                        "method": "GET",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application\/json"
+                            },
+                            {
+                                "key": "Accept",
+                                "value": "application\/json"
+                            }
+                        ],
+                        "body": null,
+                        "description": ""
+                    },
+                    "response": [
+                        {
+                            "header": [
+                                {
+                                    "key": "cache-control",
+                                    "value": "no-cache, private"
+                                },
+                                {
+                                    "key": "content-type",
+                                    "value": "application\/json"
+                                },
+                                {
+                                    "key": "vary",
+                                    "value": "Origin"
+                                }
+                            ],
+                            "code": 401,
+                            "body": "{\"message\":\"Unauthenticated.\"}",
+                            "name": ""
+                        }
+                    ]
+                },
+                {
+                    "name": "Modifier une \u0153uvre",
+                    "request": {
+                        "url": {
+                            "host": "{{baseUrl}}",
+                            "path": "api\/v1\/artworks\/:artwork_id",
+                            "query": [],
+                            "raw": "{{baseUrl}}\/api\/v1\/artworks\/:artwork_id",
+                            "variable": [
+                                {
+                                    "id": "artwork_id",
+                                    "key": "artwork_id",
+                                    "value": "16",
+                                    "description": "The ID of the artwork."
+                                },
+                                {
+                                    "id": "artwork",
+                                    "key": "artwork",
+                                    "value": "1",
+                                    "description": "ID de l'\u0153uvre."
+                                }
+                            ]
+                        },
+                        "method": "POST",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application\/json"
+                            },
+                            {
+                                "key": "Accept",
+                                "value": "application\/json"
+                            }
+                        ],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\"title\":\"Soleil de Dakar\",\"type\":\"PAINTING\",\"technique\":\"Acrylique sur toile\",\"dimensions\":\"80x60 cm\",\"year\":2025}"
+                        },
+                        "description": "R\u00e9serv\u00e9 au r\u00f4le `artist`. L'artiste ne peut modifier que ses propres \u0153uvres."
+                    },
+                    "response": []
+                },
+                {
+                    "name": "Supprimer une \u0153uvre",
+                    "request": {
+                        "url": {
+                            "host": "{{baseUrl}}",
+                            "path": "api\/v1\/artworks\/:artwork_id",
+                            "query": [],
+                            "raw": "{{baseUrl}}\/api\/v1\/artworks\/:artwork_id",
+                            "variable": [
+                                {
+                                    "id": "artwork_id",
+                                    "key": "artwork_id",
+                                    "value": "16",
+                                    "description": "The ID of the artwork."
+                                },
+                                {
+                                    "id": "artwork",
+                                    "key": "artwork",
+                                    "value": "1",
+                                    "description": "ID de l'\u0153uvre."
+                                }
+                            ]
+                        },
+                        "method": "DELETE",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application\/json"
+                            },
+                            {
+                                "key": "Accept",
+                                "value": "application\/json"
+                            }
+                        ],
+                        "body": null,
+                        "description": "R\u00e9serv\u00e9 au r\u00f4le `artist`. Impossible si un certificat est d\u00e9j\u00e0 associ\u00e9 \u00e0 cette \u0153uvre."
+                    },
+                    "response": [
+                        {
+                            "header": [],
+                            "code": 204,
+                            "body": "",
+                            "name": "supprim\u00e9e"
+                        },
+                        {
+                            "header": [],
+                            "code": 422,
+                            "body": "{\"message\": \"Impossible de supprimer une \u0153uvre li\u00e9e \u00e0 un certificat.\"}",
+                            "name": "certificat existant"
                         }
                     ]
                 }

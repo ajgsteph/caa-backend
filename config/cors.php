@@ -19,9 +19,9 @@ return [
 
   'allowed_methods' => ['*'],
 
-  'allowed_origins' => ['http://localhost:5173', 'http://localhost:3000', 'https://caa-backend-603u.onrender.com', 'https://caa-frontend-delta.vercel.app'],
+  'allowed_origins' => explode(',', env('CORS_ALLOWED_ORIGINS', ['http://localhost:3000'])),
 
-  'allowed_origins_patterns' => ['#^http://localhost(:\d+)?$#'],
+  'allowed_origins_patterns' => [],
 
   'allowed_headers' => ['*'],
 
@@ -30,5 +30,6 @@ return [
   'max_age' => 0,
 
   'supports_credentials' => true,
+
 
 ];

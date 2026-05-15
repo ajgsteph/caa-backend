@@ -1,23 +1,23 @@
-name: Certificates
+name: Œuvres
 description: |-
 
-  Création, consultation, révocation et téléchargement des certificats d'authenticité.
+  Gestion des œuvres d'art de l'artiste authentifié.
 endpoints:
   -
     custom: []
     httpMethods:
       - GET
-    uri: api/v1/certificates
+    uri: api/v1/artworks
     metadata:
       custom: []
-      groupName: Certificates
+      groupName: Œuvres
       groupDescription: |-
 
-        Création, consultation, révocation et téléchargement des certificats d'authenticité.
+        Gestion des œuvres d'art de l'artiste authentifié.
       subgroup: ''
       subgroupDescription: ''
-      title: 'Lister mes certificats'
-      description: "Retourne les certificats de l'artiste authentifié, paginés par 15."
+      title: 'Lister mes œuvres'
+      description: "Retourne les œuvres de l'artiste authentifié, paginées par 15."
       authenticated: true
       deprecated: false
     headers:
@@ -53,223 +53,31 @@ endpoints:
     custom: []
     httpMethods:
       - POST
-    uri: api/v1/certificates
+    uri: api/v1/artworks
     metadata:
       custom: []
-      groupName: Certificates
+      groupName: Œuvres
       groupDescription: |-
 
-        Création, consultation, révocation et téléchargement des certificats d'authenticité.
+        Gestion des œuvres d'art de l'artiste authentifié.
       subgroup: ''
       subgroupDescription: ''
-      title: 'Créer un certificat'
-      description: |-
-        Réservé au rôle `artist`. Crée l'œuvre + le client + le certificat (status `PENDING`),
-        initie le paiement (10 000 FCFA) et déclenche le pipeline asynchrone de génération
-        (QR, PDF, email). Le certificat passe à `ACTIVE` une fois le paiement confirmé.
+      title: 'Créer une œuvre'
+      description: 'Réservé au rôle `artist`.'
       authenticated: true
       deprecated: false
     headers:
       Authorization: 'Bearer {YOUR_TOKEN}'
-      Content-Type: multipart/form-data
+      Content-Type: application/json
       Accept: application/json
     urlParameters: []
     cleanUrlParameters: []
     queryParameters: []
     cleanQueryParameters: []
     bodyParameters:
-      artwork:
+      title:
         custom: []
-        name: artwork
-        description: ''
-        required: false
-        example: []
-        type: object
-        enumValues: []
-        exampleWasSpecified: false
-        nullable: false
-        deprecated: false
-      artwork.title:
-        custom: []
-        name: artwork.title
-        description: 'Must not be greater than 191 characters.'
-        required: true
-        example: b
-        type: string
-        enumValues: []
-        exampleWasSpecified: false
-        nullable: false
-        deprecated: false
-      artwork.type:
-        custom: []
-        name: artwork.type
-        description: ''
-        required: true
-        example: TEXTILE
-        type: string
-        enumValues:
-          - PAINTING
-          - SCULPTURE
-          - PHOTOGRAPHY
-          - DRAWING
-          - ENGRAVING
-          - DIGITAL_ART
-          - TEXTILE
-          - INSTALLATION
-          - OTHER
-        exampleWasSpecified: false
-        nullable: false
-        deprecated: false
-      artwork.technique:
-        custom: []
-        name: artwork.technique
-        description: 'Must not be greater than 191 characters.'
-        required: false
-        example: 'n'
-        type: string
-        enumValues: []
-        exampleWasSpecified: false
-        nullable: true
-        deprecated: false
-      artwork.dimensions:
-        custom: []
-        name: artwork.dimensions
-        description: 'Must not be greater than 120 characters.'
-        required: false
-        example: g
-        type: string
-        enumValues: []
-        exampleWasSpecified: false
-        nullable: true
-        deprecated: false
-      artwork.year:
-        custom: []
-        name: artwork.year
-        description: 'Must be at least 1500. Must not be greater than 2026.'
-        required: false
-        example: 16
-        type: integer
-        enumValues: []
-        exampleWasSpecified: false
-        nullable: true
-        deprecated: false
-      artwork.description:
-        custom: []
-        name: artwork.description
-        description: 'Must not be greater than 5000 characters.'
-        required: false
-        example: 'Velit et fugiat sunt nihil accusantium.'
-        type: string
-        enumValues: []
-        exampleWasSpecified: false
-        nullable: true
-        deprecated: false
-      artwork.signature:
-        custom: []
-        name: artwork.signature
-        description: 'Must not be greater than 191 characters.'
-        required: false
-        example: 'n'
-        type: string
-        enumValues: []
-        exampleWasSpecified: false
-        nullable: true
-        deprecated: false
-      artwork.image:
-        custom: []
-        name: artwork.image
-        description: 'Must be an image. Must not be greater than 5120 kilobytes.'
-        required: true
-        example: null
-        type: file
-        enumValues: []
-        exampleWasSpecified: false
-        nullable: false
-        deprecated: false
-      client:
-        custom: []
-        name: client
-        description: ''
-        required: false
-        example: []
-        type: object
-        enumValues: []
-        exampleWasSpecified: false
-        nullable: false
-        deprecated: false
-      client.last_name:
-        custom: []
-        name: client.last_name
-        description: 'Must not be greater than 120 characters.'
-        required: true
-        example: i
-        type: string
-        enumValues: []
-        exampleWasSpecified: false
-        nullable: false
-        deprecated: false
-      client.first_name:
-        custom: []
-        name: client.first_name
-        description: 'Must not be greater than 120 characters.'
-        required: true
-        example: k
-        type: string
-        enumValues: []
-        exampleWasSpecified: false
-        nullable: false
-        deprecated: false
-      client.email:
-        custom: []
-        name: client.email
-        description: 'Must be a valid email address. Must not be greater than 191 characters.'
-        required: true
-        example: aschuster@example.com
-        type: string
-        enumValues: []
-        exampleWasSpecified: false
-        nullable: false
-        deprecated: false
-      client.phone:
-        custom: []
-        name: client.phone
-        description: 'Must not be greater than 30 characters.'
-        required: false
-        example: k
-        type: string
-        enumValues: []
-        exampleWasSpecified: false
-        nullable: true
-        deprecated: false
-      payment:
-        custom: []
-        name: payment
-        description: ''
-        required: false
-        example: []
-        type: object
-        enumValues: []
-        exampleWasSpecified: false
-        nullable: false
-        deprecated: false
-      payment.method:
-        custom: []
-        name: payment.method
-        description: ''
-        required: true
-        example: WAVE
-        type: string
-        enumValues:
-          - ORANGE_MONEY
-          - MTN_MOMO
-          - WAVE
-          - BANK_CARD
-        exampleWasSpecified: false
-        nullable: false
-        deprecated: false
-      'artwork[title]':
-        custom: []
-        name: 'artwork[title]'
+        name: title
         description: "Titre de l'œuvre."
         required: true
         example: 'Soleil de Dakar'
@@ -278,10 +86,10 @@ endpoints:
         exampleWasSpecified: true
         nullable: false
         deprecated: false
-      'artwork[type]':
+      type:
         custom: []
-        name: 'artwork[type]'
-        description: "Type d'œuvre."
+        name: type
+        description: "Type d'œuvre (PAINTING, SCULPTURE, PHOTOGRAPHY, DRAWING, ENGRAVING, DIGITAL_ART, TEXTILE, INSTALLATION, OTHER)."
         required: true
         example: PAINTING
         type: string
@@ -289,164 +97,86 @@ endpoints:
         exampleWasSpecified: true
         nullable: false
         deprecated: false
-      'artwork[technique]':
+      technique:
         custom: []
-        name: 'artwork[technique]'
+        name: technique
         description: 'Technique utilisée.'
         required: false
         example: 'Acrylique sur toile'
         type: string
         enumValues: []
         exampleWasSpecified: true
-        nullable: false
+        nullable: true
         deprecated: false
-      'artwork[dimensions]':
+      dimensions:
         custom: []
-        name: 'artwork[dimensions]'
+        name: dimensions
         description: Dimensions.
         required: false
         example: '80x60 cm'
         type: string
         enumValues: []
         exampleWasSpecified: true
-        nullable: false
+        nullable: true
         deprecated: false
-      'artwork[year]':
+      year:
         custom: []
-        name: 'artwork[year]'
+        name: year
         description: 'Année de création.'
         required: false
         example: 2025
         type: integer
         enumValues: []
         exampleWasSpecified: true
-        nullable: false
+        nullable: true
         deprecated: false
-      'artwork[description]':
+      description:
         custom: []
-        name: 'artwork[description]'
+        name: description
         description: 'Description longue.'
         required: false
         example: null
         type: string
         enumValues: []
         exampleWasSpecified: false
-        nullable: false
+        nullable: true
         deprecated: false
-      'artwork[signature]':
+      signature:
         custom: []
-        name: 'artwork[signature]'
+        name: signature
         description: "Signature de l'artiste."
         required: false
         example: null
         type: string
         enumValues: []
         exampleWasSpecified: false
-        nullable: false
+        nullable: true
         deprecated: false
-      'artwork[image]':
+      image:
         custom: []
-        name: 'artwork[image]'
-        description: "Image de l'œuvre (jpg/png/webp, max 5 Mo)."
-        required: true
+        name: image
+        description: "Image de l'œuvre (jpg/jpeg/png/webp, max 5 Mo)."
+        required: false
         example: null
         type: file
         enumValues: []
         exampleWasSpecified: false
-        nullable: false
-        deprecated: false
-      'client[last_name]':
-        custom: []
-        name: 'client[last_name]'
-        description: 'Nom du client.'
-        required: true
-        example: Ndiaye
-        type: string
-        enumValues: []
-        exampleWasSpecified: true
-        nullable: false
-        deprecated: false
-      'client[first_name]':
-        custom: []
-        name: 'client[first_name]'
-        description: 'Prénom du client.'
-        required: true
-        example: Mamadou
-        type: string
-        enumValues: []
-        exampleWasSpecified: true
-        nullable: false
-        deprecated: false
-      'client[email]':
-        custom: []
-        name: 'client[email]'
-        description: 'Email du client.'
-        required: true
-        example: client@test.sn
-        type: string
-        enumValues: []
-        exampleWasSpecified: true
-        nullable: false
-        deprecated: false
-      'client[phone]':
-        custom: []
-        name: 'client[phone]'
-        description: 'Téléphone du client.'
-        required: false
-        example: '+221770000099'
-        type: string
-        enumValues: []
-        exampleWasSpecified: true
-        nullable: false
-        deprecated: false
-      'payment[method]':
-        custom: []
-        name: 'payment[method]'
-        description: 'Méthode de paiement.'
-        required: true
-        example: WAVE
-        type: string
-        enumValues: []
-        exampleWasSpecified: true
-        nullable: false
+        nullable: true
         deprecated: false
     cleanBodyParameters:
-      artwork:
-        title: b
-        type: TEXTILE
-        technique: 'n'
-        dimensions: g
-        year: 16
-        description: 'Velit et fugiat sunt nihil accusantium.'
-        signature: 'n'
-      client:
-        last_name: i
-        first_name: k
-        email: aschuster@example.com
-        phone: k
-      payment:
-        method: WAVE
-      'artwork[title]': 'Soleil de Dakar'
-      'artwork[type]': PAINTING
-      'artwork[technique]': 'Acrylique sur toile'
-      'artwork[dimensions]': '80x60 cm'
-      'artwork[year]': 2025
-      'client[last_name]': Ndiaye
-      'client[first_name]': Mamadou
-      'client[email]': client@test.sn
-      'client[phone]': '+221770000099'
-      'payment[method]': WAVE
-    fileParameters:
-      artwork:
-        image: null
-      'artwork[image]': null
+      title: 'Soleil de Dakar'
+      type: PAINTING
+      technique: 'Acrylique sur toile'
+      dimensions: '80x60 cm'
+      year: 2025
+    fileParameters: []
     responses:
       -
         custom: []
-        status: 202
-        content: '{"data": {"unique_number": "CAA-2026-0001", "status": "PENDING"}}'
+        status: 201
+        content: '{"data": {"id": 1, "title": "Soleil de Dakar", "type": "PAINTING"}}'
         headers: []
-        description: accepted
+        description: created
     responseFields: []
     auth:
       - headers
@@ -459,17 +189,17 @@ endpoints:
     custom: []
     httpMethods:
       - GET
-    uri: 'api/v1/certificates/{certificate_id}'
+    uri: 'api/v1/artworks/{artwork_id}'
     metadata:
       custom: []
-      groupName: Certificates
+      groupName: Œuvres
       groupDescription: |-
 
-        Création, consultation, révocation et téléchargement des certificats d'authenticité.
+        Gestion des œuvres d'art de l'artiste authentifié.
       subgroup: ''
       subgroupDescription: ''
-      title: 'Voir un certificat'
-      description: "L'artiste voit ses propres certificats ; les admins voient tout."
+      title: 'Voir une œuvre'
+      description: ''
       authenticated: true
       deprecated: false
     headers:
@@ -477,10 +207,10 @@ endpoints:
       Content-Type: application/json
       Accept: application/json
     urlParameters:
-      certificate_id:
+      artwork_id:
         custom: []
-        name: certificate_id
-        description: 'The ID of the certificate.'
+        name: artwork_id
+        description: 'The ID of the artwork.'
         required: true
         example: 16
         type: integer
@@ -488,10 +218,10 @@ endpoints:
         exampleWasSpecified: false
         nullable: false
         deprecated: false
-      certificate:
+      artwork:
         custom: []
-        name: certificate
-        description: 'ID du certificat.'
+        name: artwork
+        description: "ID de l'œuvre."
         required: true
         example: 1
         type: integer
@@ -500,8 +230,8 @@ endpoints:
         nullable: false
         deprecated: false
     cleanUrlParameters:
-      certificate_id: 16
-      certificate: 1
+      artwork_id: 16
+      artwork: 1
     queryParameters: []
     cleanQueryParameters: []
     bodyParameters: []
@@ -528,18 +258,18 @@ endpoints:
   -
     custom: []
     httpMethods:
-      - GET
-    uri: 'api/v1/certificates/{certificate_id}/download-link'
+      - POST
+    uri: 'api/v1/artworks/{artwork_id}'
     metadata:
       custom: []
-      groupName: Certificates
+      groupName: Œuvres
       groupDescription: |-
 
-        Création, consultation, révocation et téléchargement des certificats d'authenticité.
+        Gestion des œuvres d'art de l'artiste authentifié.
       subgroup: ''
       subgroupDescription: ''
-      title: 'Obtenir un lien signé de téléchargement PDF'
-      description: 'Retourne une URL signée valide 1 h vers `/api/v1/download/{id}`.'
+      title: 'Modifier une œuvre'
+      description: "Réservé au rôle `artist`. L'artiste ne peut modifier que ses propres œuvres."
       authenticated: true
       deprecated: false
     headers:
@@ -547,10 +277,10 @@ endpoints:
       Content-Type: application/json
       Accept: application/json
     urlParameters:
-      certificate_id:
+      artwork_id:
         custom: []
-        name: certificate_id
-        description: 'The ID of the certificate.'
+        name: artwork_id
+        description: 'The ID of the artwork.'
         required: true
         example: 16
         type: integer
@@ -558,10 +288,10 @@ endpoints:
         exampleWasSpecified: false
         nullable: false
         deprecated: false
-      certificate:
+      artwork:
         custom: []
-        name: certificate
-        description: 'ID du certificat.'
+        name: artwork
+        description: "ID de l'œuvre."
         required: true
         example: 1
         type: integer
@@ -570,20 +300,107 @@ endpoints:
         nullable: false
         deprecated: false
     cleanUrlParameters:
-      certificate_id: 16
-      certificate: 1
+      artwork_id: 16
+      artwork: 1
     queryParameters: []
     cleanQueryParameters: []
-    bodyParameters: []
-    cleanBodyParameters: []
-    fileParameters: []
-    responses:
-      -
+    bodyParameters:
+      title:
         custom: []
-        status: 200
-        content: '{"url": "http://localhost/api/v1/download/1?expires=...&signature=...", "expires_in_seconds": 3600}'
-        headers: []
-        description: ''
+        name: title
+        description: "Titre de l'œuvre."
+        required: false
+        example: 'Soleil de Dakar'
+        type: string
+        enumValues: []
+        exampleWasSpecified: true
+        nullable: false
+        deprecated: false
+      type:
+        custom: []
+        name: type
+        description: "Type d'œuvre."
+        required: false
+        example: PAINTING
+        type: string
+        enumValues: []
+        exampleWasSpecified: true
+        nullable: false
+        deprecated: false
+      technique:
+        custom: []
+        name: technique
+        description: 'Technique utilisée.'
+        required: false
+        example: 'Acrylique sur toile'
+        type: string
+        enumValues: []
+        exampleWasSpecified: true
+        nullable: true
+        deprecated: false
+      dimensions:
+        custom: []
+        name: dimensions
+        description: Dimensions.
+        required: false
+        example: '80x60 cm'
+        type: string
+        enumValues: []
+        exampleWasSpecified: true
+        nullable: true
+        deprecated: false
+      year:
+        custom: []
+        name: year
+        description: 'Année de création.'
+        required: false
+        example: 2025
+        type: integer
+        enumValues: []
+        exampleWasSpecified: true
+        nullable: true
+        deprecated: false
+      description:
+        custom: []
+        name: description
+        description: 'Description longue.'
+        required: false
+        example: null
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: true
+        deprecated: false
+      signature:
+        custom: []
+        name: signature
+        description: "Signature de l'artiste."
+        required: false
+        example: null
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: true
+        deprecated: false
+      image:
+        custom: []
+        name: image
+        description: 'Nouvelle image (jpg/jpeg/png/webp, max 5 Mo).'
+        required: false
+        example: null
+        type: file
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: true
+        deprecated: false
+    cleanBodyParameters:
+      title: 'Soleil de Dakar'
+      type: PAINTING
+      technique: 'Acrylique sur toile'
+      dimensions: '80x60 cm'
+      year: 2025
+    fileParameters: []
+    responses: []
     responseFields: []
     auth:
       - headers
@@ -595,20 +412,18 @@ endpoints:
   -
     custom: []
     httpMethods:
-      - POST
-    uri: 'api/v1/certificates/{certificate_id}/revoke'
+      - DELETE
+    uri: 'api/v1/artworks/{artwork_id}'
     metadata:
       custom: []
-      groupName: Certificates
+      groupName: Œuvres
       groupDescription: |-
 
-        Création, consultation, révocation et téléchargement des certificats d'authenticité.
+        Gestion des œuvres d'art de l'artiste authentifié.
       subgroup: ''
       subgroupDescription: ''
-      title: 'Révoquer un certificat'
-      description: |-
-        Réservé aux rôles `admin` et `super_admin`. Le motif est enregistré et notifié
-        par email à l'artiste et au client.
+      title: 'Supprimer une œuvre'
+      description: 'Réservé au rôle `artist`. Impossible si un certificat est déjà associé à cette œuvre.'
       authenticated: true
       deprecated: false
     headers:
@@ -616,10 +431,10 @@ endpoints:
       Content-Type: application/json
       Accept: application/json
     urlParameters:
-      certificate_id:
+      artwork_id:
         custom: []
-        name: certificate_id
-        description: 'The ID of the certificate.'
+        name: artwork_id
+        description: 'The ID of the artwork.'
         required: true
         example: 16
         type: integer
@@ -627,10 +442,10 @@ endpoints:
         exampleWasSpecified: false
         nullable: false
         deprecated: false
-      certificate:
+      artwork:
         custom: []
-        name: certificate
-        description: 'ID du certificat.'
+        name: artwork
+        description: "ID de l'œuvre."
         required: true
         example: 1
         type: integer
@@ -639,26 +454,26 @@ endpoints:
         nullable: false
         deprecated: false
     cleanUrlParameters:
-      certificate_id: 16
-      certificate: 1
+      artwork_id: 16
+      artwork: 1
     queryParameters: []
     cleanQueryParameters: []
-    bodyParameters:
-      reason:
-        custom: []
-        name: reason
-        description: 'Motif détaillé (≥ 10 caractères).'
-        required: true
-        example: 'Œuvre non authentique selon expertise.'
-        type: string
-        enumValues: []
-        exampleWasSpecified: true
-        nullable: false
-        deprecated: false
-    cleanBodyParameters:
-      reason: 'Œuvre non authentique selon expertise.'
+    bodyParameters: []
+    cleanBodyParameters: []
     fileParameters: []
-    responses: []
+    responses:
+      -
+        custom: []
+        status: 204
+        content: ''
+        headers: []
+        description: supprimée
+      -
+        custom: []
+        status: 422
+        content: '{"message": "Impossible de supprimer une œuvre liée à un certificat."}'
+        headers: []
+        description: 'certificat existant'
     responseFields: []
     auth:
       - headers

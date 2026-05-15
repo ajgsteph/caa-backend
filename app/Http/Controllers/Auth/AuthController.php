@@ -58,6 +58,10 @@ class AuthController extends Controller
      *
      * @unauthenticated
      *
+     * @bodyParam email string required Email de l'utilisateur. Example: awa@caa.sn
+     * @bodyParam password string required Mot de passe de l'utilisateur. Example: awapass
+     * @bodyParam device_name string Nom de l'appareil ou du client API. Example: scalar
+     *
      * @response 200 scenario="success" {
      *   "data": {"id": 3, "email": "awa@caa.sn", "roles": ["artist"]},
      *   "token": "2|6URd4kiuvxY5pHKFzSnpYbP0LM3XkLattT2rTfCze475f5bb"
