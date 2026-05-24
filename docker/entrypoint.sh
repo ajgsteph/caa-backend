@@ -14,6 +14,7 @@ php artisan route:cache
 php artisan view:cache
 php artisan scribe:generate  
 php artisan storage:link
+php artisan queue:work
 
 service nginx start
 php-fpm -F
