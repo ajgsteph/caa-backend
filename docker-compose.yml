@@ -1,3 +1,7 @@
+x-app-env: &app-env
+  env_file:
+    - .env
+
 services:
   app:
     build:
@@ -5,8 +9,7 @@ services:
       dockerfile: Dockerfile
     image: caa-backend:latest
     restart: unless-stopped
-    environment:
-      <<: *app-env
+    <<: *app-env
     ports:
       - "${APP_PORT:-8000}:80"
     volumes:
@@ -20,9 +23,16 @@ services:
   worker:
     image: caa-backend:latest
     restart: unless-stopped
-    command: ["php", "artisan", "queue:work", "--tries=3", "--timeout=120", "--sleep=2"]
-    environment:
-      <<: *app-env
+    command:
+      [
+        "php",
+        "artisan",
+        "queue:work",
+        "--tries=3",
+        "--timeout=120",
+        "--sleep=2",
+      ]
+    <<: *app-env
     volumes:
       - app-storage:/var/www/storage/app
     depends_on:
@@ -32,7 +42,6 @@ services:
         condition: service_healthy
       redis:
         condition: service_healthy
-
   db:
     image: postgres:16-alpine
     restart: unless-stopped
@@ -43,7 +52,11 @@ services:
     volumes:
       - db-data:/var/lib/postgresql/data
     healthcheck:
-      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER:-caa} -d ${POSTGRES_DB:-caa}"]
+      test:
+        [
+          "CMD-SHELL",
+          "pg_isready -U ${POSTGRES_USER:-caa} -d ${POSTGRES_DB:-caa}",
+        ]
       interval: 5s
       timeout: 5s
       retries: 12
