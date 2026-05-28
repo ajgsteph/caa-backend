@@ -7,14 +7,11 @@ if [ ! -f /var/www/.env ]; then
     cp /var/www/.env.example /var/www/.env
 fi
 
-# php artisan key:generate --force
-# php artisan migrate:fresh --seed 
+php artisan migrate --force
 php artisan config:cache
 php artisan route:cache
 php artisan view:cache
-php artisan scribe:generate  
 php artisan storage:link
-php artisan queue:work
 
 service nginx start
-php-fpm -F
+exec php-fpm -F

@@ -35,36 +35,31 @@ services:
     restart: unless-stopped
     environment:
       <<: *app-env
-      SERVER_NAME: ":80"
     ports:
       - "${APP_PORT:-8000}:80"
-      - "${APP_HTTPS_PORT:-8443}:443"
     volumes:
-      - app-storage:/app/storage/app
+      - app-storage:/var/www/storage/app
     depends_on:
       db:
         condition: service_healthy
       redis:
-        condition: service_started
+        condition: service_healthy
 
   worker:
     image: caa-backend:latest
-    build:
-      context: .
-      dockerfile: Dockerfile
     restart: unless-stopped
     command: ["php", "artisan", "queue:work", "--tries=3", "--timeout=120", "--sleep=2"]
     environment:
       <<: *app-env
     volumes:
-      - app-storage:/app/storage/app
+      - app-storage:/var/www/storage/app
     depends_on:
       app:
         condition: service_started
       db:
         condition: service_healthy
       redis:
-        condition: service_started
+        condition: service_healthy
 
   db:
     image: postgres:16-alpine
