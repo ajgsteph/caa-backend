@@ -1,5 +1,4 @@
 #!/bin/bash
-set -e
 
 cd /var/www
 
@@ -11,7 +10,7 @@ php artisan migrate --force
 php artisan config:cache
 php artisan route:cache
 php artisan view:cache
-php artisan storage:link
-php artisan scribe:generate
+php artisan storage:link || true
+php artisan scribe:generate || true
 service nginx start
 exec php-fpm -F
