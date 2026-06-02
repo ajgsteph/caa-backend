@@ -23,7 +23,9 @@ return Application::configure(basePath: dirname(__DIR__))
             'role_or_permission' => RoleOrPermissionMiddleware::class,
             'artist.active' => EnsureArtistIsActive::class,
         ]);
-    })
+    })->withMiddleware(function (Middleware $middleware) {
+    $middleware->trustProxies(at: '*');
+})
     ->withExceptions(function (Exceptions $exceptions): void {
         $exceptions->shouldRenderJsonWhen(
             fn ($request) => $request->is('api/*') || $request->expectsJson()
