@@ -3,9 +3,9 @@
 namespace App\Actions\Certificate;
 
 use App\Actions\Client\FindOrCreateClientAction;
-// use App\Actions\Payment\InitiatePaymentAction;
+use App\Actions\Payment\InitiatePaymentAction;
 use App\Enums\CertificateStatus;
-// use App\Enums\PaymentMethod;
+use App\Enums\PaymentMethod;
 use App\Jobs\GeneratePdfJob;
 use App\Jobs\GenerateQrCodeJob;
 use App\Jobs\SendCertificateEmailJob;
@@ -20,7 +20,7 @@ class CreateCertificateAction
   public function __construct(
     private readonly FindOrCreateClientAction $findOrCreateClient,
     private readonly GenerateUniqueNumberAction $generateUniqueNumber,
-    // private readonly InitiatePaymentAction $initiatePayment,
+    private readonly InitiatePaymentAction $initiatePayment,
   ) {}
 
   public function execute(User $artist, array $payload): Certificate
@@ -39,16 +39,11 @@ class CreateCertificateAction
         'status' => CertificateStatus::PENDING,
       ]);
 
-      // $this->initiatePayment->execute(
-      //     $certificate,
-      //     PaymentMethod::from($payload['payment']['method'])
-      // );
+      $this->initiatePayment->execute(
+        $certificate,
+        PaymentMethod::from($payload['payment']['method'])
+      );
 
-      Bus::chain([
-        new GenerateQrCodeJob($certificate->id),
-        new GeneratePdfJob($certificate->id),
-        new SendCertificateEmailJob($certificate->id),
-      ])->dispatch();
 
       return $certificate->load(['artwork', 'client', 'artist.artistProfile', 'payment']);
     });

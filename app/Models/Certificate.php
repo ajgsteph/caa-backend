@@ -6,6 +6,7 @@ use App\Enums\CertificateStatus;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasOne;
 
 class Certificate extends Model
@@ -48,9 +49,19 @@ class Certificate extends Model
         return $this->belongsTo(User::class, 'artist_id');
     }
 
+    /**
+     * La tentative de paiement courante (la plus récente). Un certificat peut
+     * cumuler plusieurs tentatives (réessais après échec) — voir payments().
+     */
     public function payment(): HasOne
     {
-        return $this->hasOne(Payment::class);
+        return $this->hasOne(Payment::class)->latestOfMany();
+    }
+
+    /** Historique complet des tentatives de paiement. */
+    public function payments(): HasMany
+    {
+        return $this->hasMany(Payment::class);
     }
 
     public function isValid(): bool

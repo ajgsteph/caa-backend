@@ -35,4 +35,14 @@ return [
         ],
     ],
 
+    // KKiaPay (passerelle de paiement). NB : les noms d'env existants comportent
+    // des coquilles (KIKIAPAY / PUBLI) déjà déployées — on les lit tels quels.
+    'kkiapay' => [
+        'public_key' => env('KIKIAPAY_PUBLI_KEY'),
+        'private_key' => env('KIKIAPAY_PRIVATE_KEY'),
+        'secret_key' => env('KIKIAPAY_SECRET_KEY'),
+        'webhook_secret' => env('KIKIAPAY_WEBHOOK_SECRET'),
+        'sandbox' => (bool) env('KKIAPAY_SANDBOX', true),
+    ],
+
 ];

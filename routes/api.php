@@ -1,11 +1,12 @@
 <?php
 
 use App\Enums\UserRole;
+use App\Http\Controllers\ArtworkController;
 use App\Http\Controllers\Auth\AuthController;
 use App\Http\Controllers\Auth\ProfileController;
-use App\Http\Controllers\ArtworkController;
 use App\Http\Controllers\CertificateController;
 use App\Http\Controllers\DownloadController;
+use App\Http\Controllers\KkiapayWebhookController;
 use App\Http\Controllers\PublicVerificationController;
 use Illuminate\Support\Facades\Route;
 
@@ -13,6 +14,9 @@ Route::prefix('v1')->group(function (): void {
     // ---- Public ---------------------------------------------------------
     Route::post('auth/register', [AuthController::class, 'register']);
     Route::post('auth/login', [AuthController::class, 'login']);
+
+    // Webhook KKiaPay : public, protégé par la signature `x-kkiapay-secret`.
+    Route::post('webhooks/kkiapay', [KkiapayWebhookController::class, 'handle']);
 
     Route::get('verify/{number}', [PublicVerificationController::class, 'show'])
         ->where('number', 'CAA-\d{4}-\d+');
@@ -44,6 +48,7 @@ Route::prefix('v1')->group(function (): void {
             Route::post('certificates', [CertificateController::class, 'store']);
             Route::get('certificates/{certificate}', [CertificateController::class, 'show']);
             Route::get('certificates/{certificate}/download-link', [CertificateController::class, 'downloadLink']);
+            Route::post('certificates/{certificate}/payments', [CertificateController::class, 'retryPayment']);
         });
 
         // Admin endpoints
