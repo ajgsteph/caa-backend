@@ -2,39 +2,43 @@
 
 namespace App\Actions\Certificate;
 
-use Illuminate\Support\Facades\DB;
+use App\Models\Certificate;
+use RuntimeException;
 
 class GenerateUniqueNumberAction
 {
+    /** Alphabet sans caractères ambigus (pas de 0/O/1/I/L). */
+    private const ALPHABET = 'ABCDEFGHJKMNPQRSTUVWXYZ23456789';
+
+    private const CODE_LENGTH = 10;
+
+    private const MAX_ATTEMPTS = 10;
+
     public function execute(): string
     {
         $year = (int) date('Y');
 
-        return DB::transaction(function () use ($year): string {
-            $row = DB::table('certificate_sequences')
-                ->where('year', $year)
-                ->lockForUpdate()
-                ->first();
+        for ($attempt = 0; $attempt < self::MAX_ATTEMPTS; $attempt++) {
+            $number = sprintf('CAA-%d-%s', $year, $this->randomCode());
 
-            if ($row === null) {
-                DB::table('certificate_sequences')->insert([
-                    'year' => $year,
-                    'last_number' => 1,
-                    'created_at' => now(),
-                    'updated_at' => now(),
-                ]);
-                $next = 1;
-            } else {
-                $next = $row->last_number + 1;
-                DB::table('certificate_sequences')
-                    ->where('year', $year)
-                    ->update([
-                        'last_number' => $next,
-                        'updated_at' => now(),
-                    ]);
+            if (! Certificate::where('unique_number', $number)->exists()) {
+                return $number;
             }
+        }
 
-            return sprintf('CAA-%d-%04d', $year, $next);
-        });
+        throw new RuntimeException('Impossible de générer un numéro de certificat unique.');
+    }
+
+    private function randomCode(): string
+    {
+        $max = strlen(self::ALPHABET) - 1;
+        $code = '';
+
+        for ($i = 0; $i < self::CODE_LENGTH; $i++) {
+            // random_int() : générateur cryptographiquement sûr.
+            $code .= self::ALPHABET[random_int(0, $max)];
+        }
+
+        return $code;
     }
 }

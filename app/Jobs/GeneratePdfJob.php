@@ -10,6 +10,7 @@ use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Str;
 
 class GeneratePdfJob implements ShouldQueue
 {
@@ -28,7 +29,8 @@ class GeneratePdfJob implements ShouldQueue
             return;
         }
 
-        $relativePath = 'certificates/'.$certificate->unique_number.'.pdf';
+        // Nom de fichier aléatoire (non devinable), réutilisé tel quel si déjà généré.
+        $relativePath = $certificate->pdf_path ?: 'certificates/'.Str::random(40).'.pdf';
 
         $pdf = Pdf::loadView('pdf.certificate', [
             'certificate' => $certificate,
