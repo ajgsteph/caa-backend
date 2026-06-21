@@ -12,6 +12,23 @@
     $dimensions = $certificate->artwork?->dimensions;
     $annee      = $certificate->artwork?->year;
     $qualite    = 'artiste';
+
+    // Phrase d'attestation assemblée en PHP (évite les @if collés au texte dans Blade).
+    $phrase = 'est une création originale et une pièce unique';
+    $bits = [];
+    if ($annee) {
+        $bits[] = 'réalisée en '.$annee;
+    }
+    if ($matiere) {
+        $bits[] = 'en '.$matiere;
+    }
+    if ($bits) {
+        $phrase .= ', '.implode(' ', $bits);
+    }
+    if ($dimensions) {
+        $phrase .= ' ('.$dimensions.')';
+    }
+    $phrase .= '.';
 @endphp
 <!DOCTYPE html>
 <html lang="fr">
@@ -221,8 +238,7 @@
 
             <p class="statement">
                 Je soussigné {{ $artistName }}, {{ $qualite }},
-                certifie que l'œuvre <span class="work">«&nbsp;{{ $oeuvre }}&nbsp;»</span> est une
-                création originale et une pièce unique@if($annee), réalisée en {{ $annee }}@endif@if($matiere) en {{ $matiere }}@endif@if($dimensions) ({{ $dimensions }})@endif.
+                certifie que l'œuvre <span class="work">«&nbsp;{{ $oeuvre }}&nbsp;»</span> {{ $phrase }}
                 Le présent certificat atteste de l'authenticité et de la propriété de l'œuvre.
             </p>
 
